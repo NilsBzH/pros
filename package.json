@@ -1,0 +1,25 @@
+{
+  "name": "pros",
+  "displayName": "PROS",
+  "description": "PROS macro language",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.69.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "pros",
+      "aliases": ["PROS macro language", "pros"],
+      "extensions": [".pros"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "pros",
+      "scopeName": "source.pros",
+      "path": "./syntaxes/pros.tmLanguage.json"
+    }]
+  }
+}
