@@ -3,13 +3,89 @@
 	"name": "PROS macro language",
 	"patterns": [
 		{
-			"include": "#keywords"
+			"include": "#comments"
+		},
+		{
+			"include": "#operators"
 		},
 		{
 			"include": "#strings"
+		},
+		{
+			"include": "#numbers"
+		},
+		{
+			"include": "#reserved-words"
+		},
+		{
+			"include": "#ctrl-statements"
+		},
+		{
+			"include": "#keywords"
 		}
 	],
 	"repository": {
+		"comments": {
+			"patterns": [
+				{
+					"begin": "#\\!",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.comment.pros"
+						}
+					},
+					"end": "\\n",
+					"name": "comment.line.number-sign.pros"
+				},
+				{
+					"captures": {
+						"0": {
+							"name": "punctuation.definition.comment.pros"
+						}
+					},
+					"match": "/\\*\\*/",
+					"name": "comment.block.enpty.pros"
+				},
+				{
+					"include": "#comments-inline"
+				}
+			]
+		},
+		"comments-inline": {
+			"patterns": [
+				{
+					"begin": "/\\*",
+					"captures": {
+						"0": {
+							"name": "punctuation.definition.comment.pros"
+						}
+					},
+					"end": "\\*/",
+					"name": "comment.block.pros"
+				},
+				{
+					"begin": "(^[ \\t]+)?(?=//)",
+					"beginCaptures": {
+						"1": {
+							"name": "punctuation.whitespace.comment.leading.pros"
+						}
+					},
+					"end": "'?!\\G",
+					"patterns": [
+						{
+							"begin": "//",
+							"beginCaptures": {
+								"0": {
+									"name": "punctuation.definition.comment.pros"
+								}
+							},
+							"end": "\\n",
+							"name": "comment.line.double-slash.pros"
+						}
+					]
+				}
+			]
+		},
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control.pros",
