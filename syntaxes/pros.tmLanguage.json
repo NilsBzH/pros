@@ -1,5 +1,5 @@
 {
-	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"$schema": "https://raw.githubusercontent.com/NilsBzH/pros/main/syntaxes/pros.tmLanguage.json",
 	"name": "PROS macro language",
 	"patterns": [
 		{
@@ -88,8 +88,8 @@
 		},
 		"keywords": {
 			"patterns": [{
-				"name": "keyword.control.pros",
-				"match": "\\b(if|while|for|return)\\b"
+				"match": "(?i:\\b(if|else|else_if|end_if|repeat|until|while|end_while)\\b)",
+				"name": "keyword.control.pros"
 			}]
 		},
 		"strings": {

@@ -20,6 +20,17 @@
       "language": "pros",
       "scopeName": "source.pros",
       "path": "./syntaxes/pros.tmLanguage.json"
-    }]
+    }],
+		"snippets": [
+			{
+				"language": "pros",
+				"path": "./snippets/pros.code-snippets"
+			}
+		]
   }
+  ,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/NilsBzH/pros.git"
+	}
 }

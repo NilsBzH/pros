@@ -1,0 +1,468 @@
+{
+    "If": {
+        "prefix": "if",
+        "body": [
+            "IF ${1:statement}",
+            "\t$0",
+            "END_IF"
+        ],
+        "description": "If ... PROS"
+    },
+    "Else": {
+		"prefix": "else",
+		"body": [
+			"ELSE"
+		],
+		"description": "Else ... PROS"
+	},
+    "ElseIf": {
+		"prefix": "elseIf",
+		"body": [
+			"ELSE_IF "
+		],
+		"description": "ElseIf ... PROS"
+	},
+    "EndIf": {
+		"prefix": "endIf",
+		"body": [
+			"END_IF "
+		],
+		"description": "EndIf ... PROS"
+	},
+    "While": {
+        "prefix": "while",
+        "body": [
+            "WHILE ${1:statement}",
+            "\t$0",
+            "END_WHILE"
+        ],
+        "description": "While ... PROS"
+    },
+    "EndWhile": {
+		"prefix": "endWhile",
+		"body": [
+			"END_WHILE "
+		],
+		"description": "EndWhile ... PROS"
+	},
+    "Repeat": {
+        "prefix": "repeat",
+        "body": [
+            "REPEAT",
+            "\t$0",
+            "UNTIL ${1:statement}"
+        ],
+        "description": "While ... PROS"
+    },
+    "Until": {
+		"prefix": "until",
+		"body": [
+			"UNTIL "
+		],
+		"description": "Until ... PROS"
+	},
+    "ExitLoop": {
+		"prefix": "exitLoop",
+		"body": [
+			"EXIT_LOOP"
+		],
+		"description": "ExitLoop ... PROS"
+	},
+    "true": {
+		"prefix": "true",
+		"body": [
+			"TRUE"
+		],
+		"description": "true ... PROS"
+	},
+    "false": {
+		"prefix": "true",
+		"body": [
+			"FALSE"
+		],
+		"description": "false ... PROS"
+	},
+    "or": {
+		"prefix": "or",
+		"body": [
+			"OR "
+		],
+		"description": "or ... PROS"
+	},
+    "and": {
+		"prefix": "and",
+		"body": [
+			"AND "
+		],
+		"description": "and ... PROS"
+	},
+    "not": {
+		"prefix": "not",
+		"body": [
+			"NOT "
+		],
+		"description": "not ... PROS"
+	},
+    "exor": {
+		"prefix": "exor",
+		"body": [
+			"EX_OR "
+		],
+		"description": "exor ... PROS"
+	},
+    "define": {
+		"prefix": "define",
+		"body": [
+			"DEFINE ${1:brc}()",
+            "\t$0",
+            "END_DEFINE"
+		],
+		"description": "define ... PROS"
+	},
+    "endDefine": {
+		"prefix": "endDefine",
+		"body": [
+			"END_DEFINE"
+		],
+		"description": "endDefine ... PROS"
+	},
+    "trace": {
+		"prefix": "trace",
+		"body": [
+			"TRACE "
+		],
+		"description": "not ... PROS"
+	},
+    "Local": {
+		"prefix": "local",
+		"body": [
+			"LOCAL ${TM_SELECTED_TEXT:${1:name}} ${2:value}"
+		],
+		"description": "Local ... PROS"
+	},
+    "Let": {
+		"prefix": "let",
+		"body": [
+			"LET ${TM_SELECTED_TEXT:${1:name}} ${2:value}"
+		],
+		"description": "Let ... PROS"
+	},
+    "Delete": {
+		"prefix": "delete",
+		"body": [
+			"DELETE ${1:name}"
+		],
+		"description": "Delete ... PROS"
+	},
+    "DeleteVar": {
+		"prefix": "deleteVar",
+		"body": [
+			"DELETE_VAR"
+		],
+		"description": "DeleteVar ... PROS"
+	},
+    "Display": {
+		"prefix": "display",
+		"body": [
+			"DISPLAY "
+		],
+		"description": "Display ... PROS"
+	},
+    "Message": {
+		"prefix": "message",
+		"body": [
+			"MESSAGE ${TM_SELECTED_TEXT}"
+		],
+		"description": "Message ... PROS"
+	},
+    "Error": {
+		"prefix": "error",
+		"body": [
+			"ERROR ${TM_SELECTED_TEXT}"
+		],
+		"description": "Error ... PROS"
+	},
+    "IsArray": {
+		"prefix": "isArray",
+		"body": [
+			"IsArray(${1:expression}) "
+		],
+		"description": "IsArray ... PROS"
+	},
+    "IsObject": {
+		"prefix": "isObject",
+		"body": [
+			"IsObject(${1:expression}) "
+		],
+		"description": "IsObject ... PROS"
+	},
+    "IsString": {
+		"prefix": "isString",
+		"body": [
+			"IsString(${1:expression}) "
+		],
+		"description": "IsString ... PROS"
+	},
+    "IsDefined": {
+		"prefix": "isDefined",
+		"body": [
+			"IsDefined(${1:expression}) "
+		],
+		"description": "IsDefined ... PROS"
+	},
+    "IsEqual": {
+		"prefix": "isEqual",
+		"body": [
+			"IsEqual(${1:expression}) "
+		],
+		"description": "IsEqual ... PROS"
+	},
+    "IsInArray": {
+		"prefix": "isInArray",
+		"body": [
+			"IsInArray(${1:expression}) "
+		],
+		"description": "IsInArray ... PROS"
+	},
+    "str": {
+		"prefix": "str",
+		"body": [
+			"STR(${TM_SELECTED_TEXT:${1:expression}})"
+		],
+		"description": "str ... PROS"
+	},
+    "number": {
+		"prefix": "number",
+		"body": [
+			"NUMBER(${TM_SELECTED_TEXT:${1:expression}})"
+		],
+		"description": "number ... PROS"
+	},
+    "length": {
+		"prefix": "length",
+		"body": [
+			"LENGTH(${1:string})"
+		],
+		"description": "length ... PROS"
+	},
+    "lpad": {
+		"prefix": "lpad",
+		"body": [
+			"Lpad(${1:string},${2:lengthString},${3:append}) "
+		],
+		"description": "lpad ... PROS"
+	},
+    "rpad": {
+		"prefix": "rpad",
+		"body": [
+			"Rpad(${1:string},${2:lengthString},${3:append}) "
+		],
+		"description": "rpad ... PROS"
+	},
+    "upper": {
+		"prefix": "upper",
+		"body": [
+			"UPPER(${TM_SELECTED_TEXT:${1:string}})"
+		],
+		"description": "upper ... PROS"
+	},
+    "lower": {
+		"prefix": "lower",
+		"body": [
+			"LOWER(${TM_SELECTED_TEXT:${1:string}})"
+		],
+		"description": "upper ... PROS"
+	},
+    "trim": {
+		"prefix": "lpad",
+		"body": [
+			"TRIM ${1:option} ${2:string}"
+		],
+		"description": "trim ... PROS"
+	},
+    "replaceStr": {
+		"prefix": "replaceStr",
+		"body": [
+			"REPLACE_STR ${1:inString} ${2:thisString} ${3:byThisString}"
+		],
+		"description": "replaceStr ... PROS"
+	},
+    "rpt": {
+		"prefix": "rpt",
+		"body": [
+			"RPT ${1:string} ${2:number}"
+		],
+		"description": "trim ... PROS"
+	},
+    "subStr": {
+		"prefix": "subStr",
+		"body": [
+			"SUBSTR ${1:string} ${2:begining} ${3:length}"
+		],
+		"description": "subStr ... PROS"
+	},
+    "stringFnawk": {
+		"prefix": "stringFnawk",
+		"body": [
+			"StringFnawk(${1:string} ${2:separator} \"${3:array}\")"
+		],
+		"description": "stringFnawk ... PROS"
+	},
+    "findStr": {
+		"prefix": "findStr",
+		"body": [
+			"FIND_STR ${1:start(optional)} ${2:string} ${3:toFind}"
+		],
+		"description": "findStr ... PROS"
+	},
+    "comment_selected": {
+		"prefix": "#comment",
+		"body": [
+			"/* ${TM_SELECTED_TEXT} */"
+		],
+		"description": "comment ... PROS"
+	},
+
+//confML
+    "confml": {
+		"prefix": "confml",
+		"body": [
+			"confML.${1|getObjectByCPE,getExistingObjectByCPE,getBdtTableName,getSetting,getSettings,getDefaultPricingMethods,clearBusinessExplanations,isDomainValue,isObjectLoaded,raiseAction,raiseBusinessExplanation,raiseSetValue,saveConfiguration,setSetting,setSettings,getSimpleInput,getListInput,setSimpleOutput,setListOutput|}"
+		],
+		"description": "confml ... PROS"
+	},
+    "getObjectByCPE": {
+        "prefix": "getObjectByCPE",
+        "body": [
+            "getObjectByCPE(\"${1:CPE}\")"
+        ],
+        "description": "getObjectByCPE ... PROS"
+    },
+    "getExistingObjectByCPE": {
+        "prefix": "getExistingObjectByCPE",
+        "body": [
+            "confML.getExistingObjectByCPE(\"${1:CPE}\")"
+        ],
+        "description": "getExistingObjectByCPE ... PROS"
+    },
+    "getBdtTableName": {
+        "prefix": "getBdtTableName",
+        "body": [
+            "confML.getBdtTableName(\"${1:bdtName}\")"
+        ],
+        "description": "getExistingObjectByCPE ... PROS"
+    },
+    "getSetting": {
+        "prefix": "getSetting",
+        "body": [
+            "confML.getSetting(\"${1:CPE}\")"
+        ],
+        "description": "getSetting ... PROS"
+    },
+    "getSettings": {
+        "prefix": "getSettings",
+        "body": [
+            "confML.getSettings(\"${1:CPE}\")"
+        ],
+        "description": "getSettings ... PROS"
+    },
+    "getDefaultPricingMethods": {
+        "prefix": "getDefaultPricingMethods",
+        "body": [
+            "confML.getDefaultPricingMethods()"
+        ],
+        "description": "getDefaultPricingMethods ... PROS"
+    },
+    "clearBusinessExplanations": {
+        "prefix": "clearBusinessExplanations",
+        "body": [
+            "confML.clearBusinessExplanations()"
+        ],
+        "description": "clearBusinessExplanations ... PROS"
+    },
+    "isDomainValue": {
+        "prefix": "isDomainValue",
+        "body": [
+            "confML.isDomainValue(\"${1:CPE}\",${2:value})"
+        ],
+        "description": "isDomainValue ... PROS"
+    },
+    "isObjectLoaded": {
+        "prefix": "isObjectLoaded",
+        "body": [
+            "confML.isObjectLoaded(${1:java.lang.String} \"${2:CPE}\")"
+        ],
+        "description": "isObjectLoaded ... PROS"
+    },
+    "raiseAction": {
+        "prefix": "raiseAction",
+        "body": [
+            "confML.raiseAction(\"${1:action}\")"
+        ],
+        "description": "raiseAction ... PROS"
+    },
+    "raiseBusinessExplanation": {
+        "prefix": "raiseBusinessExplanation",
+        "body": [
+            "confML.raiseBusinessExplanation(${1:message},${2:label},\"${3:CPE}\")"
+        ],
+        "description": "raiseBusinessExplanation ... PROS"
+    },
+    "raiseSetValue": {
+        "prefix": "raiseSetValue",
+        "body": [
+            "confML.raiseSetValue(\"${1:CPE}\",${2:value})"
+        ],
+        "description": "raiseSetValue ... PROS"
+    },
+    "saveConfiguration": {
+        "prefix": "saveConfiguration",
+        "body": [
+            "confML.saveConfiguration(${1:SavingPolicy})"
+        ],
+        "description": "saveConfiguration ... PROS"
+    },
+    "setSetting": {
+        "prefix": "setSetting",
+        "body": [
+            "confML.setSetting(\"${1:CPE}\",${2:object})"
+        ],
+        "description": "setSetting ... PROS"
+    },
+    "setSettings": {
+        "prefix": "setSettings",
+        "body": [
+            "confML.setSettings(${1:listSettings})"
+        ],
+        "description": "setSettings ... PROS"
+    },
+    "getSimpleInput": {
+        "prefix": "getSimpleInput",
+        "body": [
+            "confML.getSimpleInput(${1:aliasName})"
+        ],
+        "description": "getSimpleInput ... PROS"
+    },
+    "getListInput": {
+        "prefix": "getListInput",
+        "body": [
+            "confML.getListInput(${1:aliasName})"
+        ],
+        "description": "getListInput ... PROS"
+    },
+    "setSimpleOutput": {
+        "prefix": "setSimpleOutput",
+        "body": [
+            "confML.setSimpleOutput(${1:aliasName},${2:value})"
+        ],
+        "description": "setSimpleOutput ... PROS"
+    },
+    "setListOutput": {
+        "prefix": "setListOutput",
+        "body": [
+            "confML.setListOutput(${1:aliasName},${2:value})"
+        ],
+        "description": "setListOutput ... PROS"
+    }
+    
+}
