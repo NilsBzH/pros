@@ -21,6 +21,13 @@
       "scopeName": "source.pros",
       "path": "./syntaxes/pros.tmLanguage.json"
     }],
+    "themes": [
+      {
+        "label": "Pros",
+        "uiTheme": "vs-dark",
+        "path": "./themes/pros-color-theme.json"
+      }
+    ],
 		"snippets": [
 			{
 				"language": "pros",
