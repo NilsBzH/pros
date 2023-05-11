@@ -42,7 +42,7 @@
     "EndWhile": {
 		"prefix": "endWhile",
 		"body": [
-			"END_WHILE "
+			"END_WHILE\n"
 		],
 		"description": "EndWhile ... PROS"
 	},
@@ -58,7 +58,7 @@
     "Until": {
 		"prefix": "until",
 		"body": [
-			"UNTIL "
+			"UNTIL ${1:statement}"
 		],
 		"description": "Until ... PROS"
 	},
@@ -77,7 +77,7 @@
 		"description": "true ... PROS"
 	},
     "false": {
-		"prefix": "true",
+		"prefix": "false",
 		"body": [
 			"FALSE"
 		],
@@ -275,7 +275,7 @@
 		"description": "upper ... PROS"
 	},
     "trim": {
-		"prefix": "lpad",
+		"prefix": "trim",
 		"body": [
 			"TRIM ${1:option} ${2:string}"
 		],
@@ -464,6 +464,206 @@
             "confML.setListOutput(${1:aliasName},${2:value})"
         ],
         "description": "setListOutput ... PROS"
-    }
+    },
+
+
+
+
+    "Si": {
+        "prefix": "si",
+        "body": [
+            "SI ${1:condition}",
+            "\t$0",
+            "FIN_SI"
+        ],
+        "description": "If ... PROS"
+    },
+    "sinon": {
+		"prefix": "sinon",
+		"body": [
+			"SINON",
+			"\t$0"
+		],
+		"description": "Else ... PROS"
+	},
+    "SinonSi": {
+		"prefix": "sinonsi",
+		"body": [
+			"SINON_SI "
+		],
+		"description": "ElseIf ... PROS"
+	},
+    "FinSi": {
+		"prefix": "finsi",
+		"body": [
+			"FIN_SI\n"
+		],
+		"description": "EndIf ... PROS"
+	},
+    "TantQue": {
+        "prefix": "tantque",
+        "body": [
+            "TANT_QUE ${1:condition}",
+            "\t$0",
+            "FIN_TANT_QUE"
+        ],
+        "description": "While ... PROS"
+    },
+    "FinTantQue": {
+		"prefix": "fintantque",
+		"body": [
+			"FIN_TANT_QUE\n"
+		],
+		"description": "EndWhile ... PROS"
+	},
+    "Repeter": {
+        "prefix": "repeter",
+        "body": [
+            "REPETER",
+            "\t$0",
+            "JUSQU_A ${1:condition}"
+        ],
+        "description": "While ... PROS"
+    },
+    "Jusqua": {
+		"prefix": "jusqua",
+		"body": [
+			"JUSQU_A ${1:condition}"
+		],
+		"description": "Until ... PROS"
+	},
+    "SortieBoucle": {
+		"prefix": "sortieboucle",
+		"body": [
+			"SORTIE_BOUCLE"
+		],
+		"description": "ExitLoop ... PROS"
+	},
+    "vrai": {
+		"prefix": "vrai",
+		"body": [
+			"VRAI"
+		],
+		"description": "true ... PROS"
+	},
+    "faux": {
+		"prefix": "faux",
+		"body": [
+			"FAUX"
+		],
+		"description": "false ... PROS"
+	},
+    "ou": {
+		"prefix": "ou",
+		"body": [
+			"OU "
+		],
+		"description": "or ... PROS"
+	},
+    "et": {
+		"prefix": "et",
+		"body": [
+			"ET "
+		],
+		"description": "and ... PROS"
+	},
+    "Soit": {
+		"prefix": "soit",
+		"body": [
+			"SOIT ${TM_SELECTED_TEXT:${1:nom}} ${2:valeur}"
+		],
+		"description": "Let ... PROS"
+	},
+    "Supprimer": {
+		"prefix": "supprimer",
+		"body": [
+			"SUPPRIMER ${1:nom}"
+		],
+		"description": "Delete ... PROS"
+	},
+    "SupprimerVar": {
+		"prefix": "supprimervar",
+		"body": [
+			"SUPPRIMER_VAR"
+		],
+		"description": "DeleteVar ... PROS"
+	},
+    "Afficher": {
+		"prefix": "afficher",
+		"body": [
+			"AFFICHER "
+		],
+		"description": "Display ... PROS"
+	},
+    "Erreur": {
+		"prefix": "erreur",
+		"body": [
+			"ERREUR ${TM_SELECTED_TEXT}"
+		],
+		"description": "Error ... PROS"
+	},
+    "chaine": {
+		"prefix": "chaine",
+		"body": [
+			"CHAINE(${TM_SELECTED_TEXT:${1:expression}})"
+		],
+		"description": "str ... PROS"
+	},
+    "nombre": {
+		"prefix": "nombre",
+		"body": [
+			"NOMBRE(${TM_SELECTED_TEXT:${1:expression}})"
+		],
+		"description": "number ... PROS"
+	},
+    "longueur": {
+		"prefix": "longueur",
+		"body": [
+			"LONGUEUR(${1:chaine})"
+		],
+		"description": "length ... PROS"
+	},
+    "majuscule": {
+		"prefix": "majuscule",
+		"body": [
+			"MAJUSCULE(${TM_SELECTED_TEXT:${1:chaine}})"
+		],
+		"description": "upper ... PROS"
+	},
+    "minuscule": {
+		"prefix": "minuscule",
+		"body": [
+			"MINUSCULE(${TM_SELECTED_TEXT:${1:chaine}})"
+		],
+		"description": "upper ... PROS"
+	},
+    "oteblancs": {
+		"prefix": "oteblancs",
+		"body": [
+			"OTEBLANCS ${1:option} ${2:chaine}"
+		],
+		"description": "trim ... PROS"
+	},
+    "RemplacerChaine": {
+		"prefix": "remplacerchaine",
+		"body": [
+			"REMPLACER_CHAINE ${1:inString} ${2:thisString} ${3:byThisString}"
+		],
+		"description": "replaceStr ... PROS"
+	},
+    "sousChaine": {
+		"prefix": "sousChaine",
+		"body": [
+			"SOUS_CHAINE ${1:chaine} ${2:debut} ${3:longueur}"
+		],
+		"description": "subStr ... PROS"
+	},
+    "chercherChaine": {
+		"prefix": "chercherChaine",
+		"body": [
+			"CHERCHER_CHAINE ${1:start(optionel)} ${2:chaine} ${3:a_chercher}"
+		],
+		"description": "findStr ... PROS"
+	}
     
 }
