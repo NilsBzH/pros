@@ -334,7 +334,7 @@
     "getObjectByCPE": {
         "prefix": "getObjectByCPE",
         "body": [
-            "getObjectByCPE(\"${1:CPE}\")"
+            "confML.getObjectByCPE(\"${1:CPE}\")"
         ],
         "description": "getObjectByCPE ... PROS"
     },
