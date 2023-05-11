@@ -11,7 +11,8 @@
     "Else": {
 		"prefix": "else",
 		"body": [
-			"ELSE"
+			"ELSE",
+			"\t$0"
 		],
 		"description": "Else ... PROS"
 	},
@@ -25,7 +26,7 @@
     "EndIf": {
 		"prefix": "endIf",
 		"body": [
-			"END_IF "
+			"END_IF\n"
 		],
 		"description": "EndIf ... PROS"
 	},
@@ -316,7 +317,7 @@
 		"description": "findStr ... PROS"
 	},
     "comment_selected": {
-		"prefix": "#comment",
+		"prefix": "#comment selected text",
 		"body": [
 			"/* ${TM_SELECTED_TEXT} */"
 		],
@@ -334,7 +335,7 @@
     "getObjectByCPE": {
         "prefix": "getObjectByCPE",
         "body": [
-            "getObjectByCPE(\"${1:CPE}\")"
+            "confML.getObjectByCPE(\"${1:CPE}\")"
         ],
         "description": "getObjectByCPE ... PROS"
     },
