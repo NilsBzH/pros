@@ -10,17 +10,26 @@
     "Programming Languages"
   ],
   "contributes": {
-    "languages": [{
-      "id": "pros",
-      "aliases": ["PROS macro language", "pros"],
-      "extensions": [".pros"],
-      "configuration": "./language-configuration.json"
-    }],
-    "grammars": [{
-      "language": "pros",
-      "scopeName": "source.pros",
-      "path": "./syntaxes/pros.tmLanguage.json"
-    }],
+    "languages": [
+      {
+        "id": "pros",
+        "aliases": [
+          "PROS macro language",
+          "pros"
+        ],
+        "extensions": [
+          ".pros"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "pros",
+        "scopeName": "source.pros",
+        "path": "./syntaxes/pros.tmLanguage.json"
+      }
+    ],
     "themes": [
       {
         "label": "Pros",
@@ -28,16 +37,18 @@
         "path": "./themes/pros-color-theme.json"
       }
     ],
-		"snippets": [
-			{
-				"language": "pros",
-				"path": "./snippets/pros.code-snippets"
-			}
-		]
+    "snippets": [
+      {
+        "language": "pros",
+        "path": "./snippets/pros.code-snippets"
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NilsBzH/pros.git"
+  },
+  "devDependencies": {
+    "js-yaml": "^4.1.0"
   }
-  ,
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/NilsBzH/pros.git"
-	}
 }
