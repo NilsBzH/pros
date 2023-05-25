@@ -305,7 +305,7 @@
     "stringFnawk": {
 		"prefix": "stringFnawk",
 		"body": [
-			"StringFnawk(${1:string} ${2:separator} \"${3:array}\")"
+			"StringFnawk(${1:string},${2:separator},\"${3:array}\")"
 		],
 		"description": "stringFnawk ... PROS"
 	},
