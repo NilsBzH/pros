@@ -26,8 +26,10 @@
     ],
     "folding": {
 		"markers": {
-			"start": "^\\s*\\/\\*\\s*#region\\b\\s*(.*?)\\s*\\*\\/",
-			"end": "^\\s*\\/\\*\\s*#endregion\\b.*\\*\\/"
+            //"start": "^\\s*//\\s*#?region\\b",
+            //"end": "^\\s*//\\s*#?endregion\\b"
+            "start": "^\\s*/\\*\\s*#?region\\:.*\\*\\s*/",
+            "end": "^\\s*/\\*\\s*#?endregion\\*\\s*/"
 		}
 	},
     "indentationRules": {
