@@ -2,6 +2,7 @@
   "name": "pros",
   "displayName": "PROS",
   "description": "PROS macro language",
+  "publisher": "NilsBzH",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.69.0"
@@ -10,6 +11,13 @@
     "Programming Languages"
   ],
   "contributes": {
+    "iconThemes": [
+      {
+        "id": "pros",
+        "label": "pros icon theme",
+        "path": "icons.json"
+      }
+    ],
     "languages": [
       {
         "id": "pros",

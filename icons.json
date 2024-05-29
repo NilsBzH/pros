@@ -1,0 +1,18 @@
+{
+  "iconDefinitions": {
+    "_file": {
+      "iconPath": "images/file.svg"
+    },
+    "_pros": {
+      "iconPath": "images/pros.svg"
+    },
+    "_csv": {
+      "iconPath": "images/csv.svg"
+    }
+  },
+  "file": "_file",
+  "fileExtensions": {
+    "pros": "_pros",
+    "csv": "_csv"
+  }
+}
