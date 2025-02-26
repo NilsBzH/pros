@@ -24,6 +24,10 @@
         ["'", "'"],
         ["\/*", "*\/"]
     ],
+    "colorizedBracketPairs": [
+		["(", ")"],
+		["[", "]"]
+	],
     "folding": {
 		"markers": {
             //"start": "^\\s*//\\s*#?region\\b",
@@ -33,8 +37,23 @@
 		}
 	},
     "indentationRules": {
-		"increaseIndentPattern": "(^(if|IF|while|WHILE|loop|LOOP).*[^(END)]$)"/*"(^.*\\{[^}]*$)"*/,
-		"decreaseIndentPattern": "^\\s*(END_IF)"/*"^\\s*\\}"*/
+		"increaseIndentPattern": "^(if|IF|while|WHILE|else_if|ELSE_IF).*[^(end_if|END_IF|end_while|END_WHILE)]$|^(repeat|REPEAT|else|ELSE)$",
+        //"unIndentedLinePattern": pattern pour ligne ne devant pas être indentée
+        //"indentNextLinePattern": pattern pour indenter prochaine ligne
+		"decreaseIndentPattern": "^\\s*(end_if|END_IF|else|ELSE|else_if|ELSE_IF)"
 	},
-	"wordPattern": "(#?-?\\d*\\.\\d\\w*%?)|(::?[\\w-]*(?=[^,{;]*[,{]))|(([@#.!])?[\\w-?]+%?|[@#!.])"
+	"wordPattern": {
+        "pattern": "(#?-?\\d*\\.\\d\\w*%?)|(::?[\\w-]*(?=[^,{;]*[,{]))|(([@#.!])?[\\w-?]+%?|[@#!.])",
+    },
+    /*"onEnterRules": [
+		// Indent when pressing enter from inside ()
+		{
+			"beforeText": "^.*\\([^\\)]*$",
+			"afterText": "^\\s*\\).*$",
+			"action": {
+				"indent": "indentOutdent",
+				"appendText": "\t",
+			}
+		}
+    ]*/
 }

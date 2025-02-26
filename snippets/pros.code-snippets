@@ -186,42 +186,42 @@
     "IsArray": {
 		"prefix": "isArray",
 		"body": [
-			"IsArray(${1:expression}) "
+			"IsArray(${1:expression})"
 		],
 		"description": "IsArray ... PROS"
 	},
     "IsObject": {
 		"prefix": "isObject",
 		"body": [
-			"IsObject(${1:expression}) "
+			"IsObject(${1:expression})"
 		],
 		"description": "IsObject ... PROS"
 	},
     "IsString": {
 		"prefix": "isString",
 		"body": [
-			"IsString(${1:expression}) "
+			"IsString(${1:expression})"
 		],
 		"description": "IsString ... PROS"
 	},
     "IsDefined": {
 		"prefix": "isDefined",
 		"body": [
-			"IsDefined(${1:expression}) "
+			"IsDefined(${1:expression})"
 		],
 		"description": "IsDefined ... PROS"
 	},
     "IsEqual": {
 		"prefix": "isEqual",
 		"body": [
-			"IsEqual(${1:expression}) "
+			"IsEqual(${1:expression})"
 		],
 		"description": "IsEqual ... PROS"
 	},
     "IsInArray": {
 		"prefix": "isInArray",
 		"body": [
-			"IsInArray(${1:expression}) "
+			"IsInArray(${1:expression})"
 		],
 		"description": "IsInArray ... PROS"
 	},
@@ -249,14 +249,14 @@
     "lpad": {
 		"prefix": "lpad",
 		"body": [
-			"Lpad(${1:string},${2:lengthString},${3:append}) "
+			"Lpad(${1:string},${2:lengthString},${3:append})"
 		],
 		"description": "lpad ... PROS"
 	},
     "rpad": {
 		"prefix": "rpad",
 		"body": [
-			"Rpad(${1:string},${2:lengthString},${3:append}) "
+			"Rpad(${1:string},${2:lengthString},${3:append})"
 		],
 		"description": "rpad ... PROS"
 	},
