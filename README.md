@@ -1,57 +1,49 @@
-# pros README
+# PROS : langage macro pour VS Code
 
-PROS macro language for visual studio code
+Extension Visual Studio Code pour le **langage macro de PROS Smart CPQ**, utilisé notamment dans les règles « Macro-Based BRC » de PROS Connect. Elle s'applique aux fichiers `.pros`.
 
-## Features
+## Fonctionnalités
 
-Adding pros edge grammar capability to visual studio code
+- Coloration syntaxique des fichiers `.pros`, avec des scopes TextMate standard compatibles avec tous les thèmes. Sont reconnus :
+  - les mots-clés anglais et français, en majuscules ou en minuscules ;
+  - les définitions et appels de macros ;
+  - les fonctions intégrées (`IsDefined`, `DecimalRound`, `FIND_STR`…), les fonctions de tableaux et les opérateurs de contrainte `op*` ;
+  - l'objet `confML` et ses méthodes ;
+  - les appels de méthodes Java (`obj.put(…)`) et les classes Java courantes (`Integer`, `LinkedHashMap`…) ;
+  - les chaînes, avec échappement par doublement (`""`, `''`), et les commentaires `/* … */`.
+- Snippets pour les structures de contrôle (`IF`, `WHILE`, `REPEAT`, `DEFINE`…), les commandes courantes et les méthodes de l'objet `confML`. Les formes anglaises et françaises sont disponibles.
+- Indentation automatique des blocs : `IF … ELSE_IF … ELSE … END_IF`, `WHILE … END_WHILE`, `REPEAT … UNTIL`, ainsi que leurs formes françaises. Le corps d'une macro reste au niveau de `DEFINE`. Un bloc ouvert et fermé sur la même ligne (`IF x LET y 1 END_IF`) ne décale pas l'indentation.
+- Repli des régions délimitées par `/*#region:nom*/` et `/*#endregion*/`.
+- Thème d'icônes pour les fichiers `.pros`.
 
-## Requirements
+## Installation
 
-## Extension Settings
+Depuis un fichier `.vsix` :
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+```bash
+code --install-extension pros-<version>.vsix
+```
 
-For example:
+Vous pouvez aussi passer par la palette de commandes : **Extensions : Installer à partir d'un VSIX…**
 
-This extension contributes the following settings:
+## Limites connues
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+- L'extension ne propose pas encore de complétion, d'aide au survol ni de diagnostic.
+- Les commandes dépréciées ou désactivées de la plateforme (accès aux fichiers, `EXECUTE`, transactions SQL…) ne sont pas prises en charge : elles ne sont pas coloriées comme des fonctions intégrées.
 
-## Known Issues
+## Développement
 
-Null
+Les tests de la grammaire (dossier `test/grammar/`) se lancent avec :
 
-## Release Notes
+```bash
+npm install
+npm run test:grammar
+```
 
-In construction
+## Signaler un problème
 
-### 1.0.0
+https://github.com/NilsBzH/pros/issues
 
-Initial release of ...
+## Licence
 
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+GPL-2.0 : voir [LICENSE](LICENSE).
