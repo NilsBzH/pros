@@ -1,175 +1,327 @@
 {
-	"$schema": "https://raw.githubusercontent.com/NilsBzH/pros/main/syntaxes/pros.tmLanguage.json",
-	"name": "PROS macro language",
-	"patterns": [
-		{
-			"include": "#comment"
-		},
-		{
-			"include": "#constant"
-		},
-		{
-			"include": "#entity"
-		},
-		{
-			"include": "#invalid"
-		},
-		{
-			"include": "#keyword"
-		},
-		{
-			"include": "#markup"
-		},
-		{
-			"include": "#meta"
-		},
-		{
-			"include": "#storage"
-		},
-		{
-			"include": "#string"
-		},
-		{
-			"include": "#support"
-		},
-		{
-			"include": "#variable"
-		},
-		{
-			"include": "#operators"
-		},
-		{
-			"include": "#numbers"
-		},
-		{
-			"include": "#numeric"
-		},
-		{
-			"include": "#reserved-words"
-		},
-		{
-			"include": "#ctrl-statements"
-		}
-	],
-	"repository": {
-		"comment": {
-			"patterns": [
-				{
-					"captures": {
-						"0": {
-							"name": "punctuation.definition.comment.pros"
-						}
-					},
-					"match": "/\\*\\*/",
-					"name": "comment.block.enpty.pros"
-				},
-				{
-					"include": "#comments-inline"
-				}
-			]
-		},
-		"comments-inline": {
-			"patterns": [
-				{
-					"begin": "/\\*",
-					"captures": {
-						"0": {
-							"name": "punctuation.definition.comment.pros"
-						}
-					},
-					"end": "\\*/",
-					"name": "comment.block.pros"
-				}
-			]
-		},
-		"constant": {
-			"patterns": [
-				{
-					"match": "(?i:\\b(true|false|vrai|faux)\\b)",
-					"name": "constant.language.pros"
-				},
-				{
-					"match": "-?\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\b",
-					"name": "constant.numeric.pros"
-				}
-			]
-		},
-		"keyword": {
-			"patterns": [
-				{
-					"match": "(?i:\\b(if|si|else|sinon|else_if|sinon_si|end_if|fin_si|repeat|repeter|until|jusqu_a|while|tant_que|end_while|fin_tant_que)\\b)",
-					"name": "keyword.control.pros"
-				},
-				{
-					"match": "(?i:\\b(ABS|ACOS|TOUT|ASCII|ASIN|ATAN|ATAN2|BINAIRE|BINARY|CHANGER_ENVIRONNEMENT|CHANGE_ENVIRONMENT|FERMER_FICHIER|CLOSE_FILE|CONCAT_ANC|APPEND|COS|CREER_ENVIRONNEMENT|CREATE_ENVIRONMENT|DATE|DEFINITION|DEFINE|SUPPRIMER|DELETE|SUPPRIMER_ENVIRONNEMENT|DELETE_ENVIRONMENT|SUPPRIMER_MACRO|DELETE_MACRO|SUPPRIMER_VAR|DELETE_VAR|DETAIL|AFFICHER|DISPLAY|DIV|E|SINON|ELSE|SINON_SI|ELSE_IF|FIN_DEFINITION|END_DEFINE|FIN_SI|END_IF|FIN_TANT_QUE|END_WHILE|ENVIRONNEMENT|ENVIRONMENT|ERREUR|ERROR|EXECUTER|EXECUTE|EXP|CHAMP_SEP|FIELD_SEP|ENT|INT|FNAWK|FRACT|SI|IF|DANS|IN|GAUCHE|LEFT|LONGUEUR|LENGTH|LISTER|LIST|LN|CHARGER|LOAD|LOG|ET|AND|OU|OR|OU_EXCL|EXOR|MINUSCULE|LOWER|MACRO|MEMOIRE|MEMORY|MESSAGE|MODULO|RESTE|MOD|NOM|NAME|NON|NOT|NOMBRE|NUMBER|OUVRIR_FICHIER|OPEN_FILE|PI|PUISSANCE|POWER|LIRE_FICHIER|READ_FILE|REPETER|REPEAT|DROITE|RIGHT|ARRONDI|ROUND|RPT|SAUVER|SAVE|SIN|SQL_COMMIT|SQL_CONNECT|SQL_CREATE|SQL_DECONNECT|SQL_DISCONNECT|SQL_DECONNECT_RB|SQL_DISCONNECT_RB|SQL_DELETE|SQL_DROP|SQL_INSERT|SQL_QUERY|SQL_ROLLBACK|SQL_UPDATE|SQRT|CARRE|SQR|CHAINE| STR|SOUS_CHAINE|SUBSTR|SUPP_ANC|DEL_OLD|SYSTEME|SYSTEM|TAN|HEURE|TIME|TRACE|TRACE_FIN|TRACE_OFFOTEBLANCS|TRIM|TYPEVAR|JUSQU_A|UNTIL|MAJUSCULE|UPPER|VARIABLE|VERSION|TANT_QUE|WHILE|ECRIRE_FICHIER|WRITE_FILE|SQL_EXPORT|FORCE|WINEXE|BEEP|ACCES_FICHIER|FILE_ACCESS|TROUVER_CHAINE|FIND_STR|REMPLACER_CHAINE|REPLACE_STR|SORTIE_BOUCLE|EXIT_LOOP|SORTIE_MACRO|EXIT_MACRO|LIRE_TABLE|READ_TABLE|SELON|USING|AVEC|WITH|WINEXE32|RACINE|SUPER|COURANT|abs|acos|tout|ascii|asin|atan|atan2|binaire|binary|changer_environnement|change_environment|fermer_fichier|close_file|concat_anc|append|cos|creer_environnement|create_environment|date|definition|define|supprimer|delete|supprimer_environnement|delete_environment|supprimer_macro|delete_macro|supprimer_var|delete_var|detail|afficher|display|div|e|sinon|else|sinon_si|else_if|fin_definition|end_define|fin_si|end_if|fin_tant_que|end_while|environnement|environment|erreur|error|executer|execute|exp|champ_sep|field_sep|ent|int|fnawk|fract|si|if|dans|in|gauche|left|longueur|length|lister|list|ln|charger|load|log|et|and|ou|or|ou_excl|exor|minuscule|lower|macro|memoire|memory|message|modulo|reste|mod|nom|name|non|not|nombre|number|ouvrir_fichier|open_file|pi|puissance|power|lire_fichier|read_file|repeter|repeat|droite|right|arrondi|round|rpt|sauver|save|sin|sql_commit|sql_connect|sql_create|sql_deconnect|sql_disconnect|sql_deconnect_rb|sql_disconnect_rb|sql_delete|sql_drop|sql_insert|sql_query|sql_rollback|sql_update|sqrt|carre|sqr|chaine| str|sous_chaine|substr|supp_anc|del_old|systeme|system|tan|heure|time|trace|trace_fin|trace_off|oteblancs|trim|typevar|jusqu_a|until|majuscule|upper|variable|version|tant_que|while|ecrire_fichier|write_file|sql_export|force|winexe|beep|acces_fichier|file_access|trouver_chaine|find_str|remplacer_chaine|replace_str|sortie_boucle|exit_loop|sortie_macro|exit_macro|lire_table|read_table|selon|using|avec|with|winexe32|racine|super|courant)\\b)",
-					"name": "keyword.other.pros"
-				}
-			]
-		},
-		"string": {
-            "patterns": [
-				{
-                    "begin": "\"",
-                    "end": "\"",
-                    "name": "string.quoted.double.pros",
-                    "patterns": [{
-                            "match": "\\\\.",
-                            "name": "constant.character.escape.pros"
-                        }
-                    ]
-                },
-				{
-                    "begin": "'",
-                    "end": "'",
-                    "name": "string.quoted.single.pros",
-                    "patterns": [{
-                            "match": "\\\\.",
-                            "name": "constant.character.escape.pros"
-                        }
-                    ]
-                }
-            ]
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "PROS macro language",
+  "scopeName": "source.pros",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#array-keys"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#macro-definition"
+    },
+    {
+      "include": "#macro-end"
+    },
+    {
+      "include": "#declarations"
+    },
+    {
+      "include": "#confml"
+    },
+    {
+      "include": "#java-classes"
+    },
+    {
+      "include": "#predefined-objects"
+    },
+    {
+      "include": "#environments"
+    },
+    {
+      "include": "#builtin-functions"
+    },
+    {
+      "include": "#table-functions"
+    },
+    {
+      "include": "#constraint-operators"
+    },
+    {
+      "include": "#control"
+    },
+    {
+      "include": "#commands"
+    },
+    {
+      "include": "#legacy-keywords"
+    },
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#member-calls"
+    },
+    {
+      "include": "#function-calls"
+    },
+    {
+      "include": "#punctuation"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "name": "comment.block.pros",
+      "begin": "/\\*",
+      "end": "\\*/",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.comment.begin.pros"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.comment.end.pros"
+        }
+      }
+    },
+    "array-keys": {
+      "comment": "special array keys \"NR\", \"NF\", \"NC\", \"OP\" used as an index (reference § 7)",
+      "match": "(?<=[\\[,])\\s*(([\"'])(?:NR|NF|NC|OP)\\2)(?=\\s*[\\],])",
+      "captures": {
+        "1": {
+          "name": "constant.other.array-key.pros"
+        }
+      }
+    },
+    "strings": {
+      "comment": "quotes are escaped by doubling them; backslash is a literal character (reference § 2.3)",
+      "patterns": [
+        {
+          "name": "string.quoted.double.pros",
+          "begin": "\"",
+          "end": "\"(?!\")",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.pros"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.pros"
+            }
+          },
+          "patterns": [
+            {
+              "match": "\"\"",
+              "name": "constant.character.escape.pros"
+            }
+          ]
         },
-		"variable": {
-			"patterns": [
-				{
-					"captures": {
-						"1": {
-							"name": "storage.type.pros"
-						},
-						"2": {
-							"name": "variable.other.pros"
-						}
-					},
-					"match": "(?i:(local|soit|let)\\s*(?:(\\b[a-zA-Z_x7f-xff][a-zA-Z0-9_x7f-xff]*?\\b)\\s*(,?)))",
-					"name": "variable.other.pros"
-				},
-				{
-					"match": "(?i:\\s*\\b(let|soit|local)\\b\\s*)",
-					"name": "storage.type.pros"
-				}
-			]
-		},
-		"operators": {
-			"patterns": [
-				{
-					"match": "\\+|\\-|\\*|\\/|%|\\*\\*|\\^|\\b(modulo|power)\\b",
-					"name": "keyword.operators.arithmetic.pros"
-				},
-				{
-					"match": "\\b(or|and|ex_or|not|ou|et)\\b",
-					"name": "keyword.operators.logical.pros"
-				},
-				{
-					"match": ":=",
-					"name": "keyword.operators.assignement.pros"
-				},
-				{
-					"match": "=|<>|<|>|<=|>=",
-					"name": "keyword.operators.relational.pros"
-				}
-			]
-		}
-	},
-	"scopeName": "source.pros"
+        {
+          "name": "string.quoted.single.pros",
+          "begin": "'",
+          "end": "'(?!')",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.pros"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.pros"
+            }
+          },
+          "patterns": [
+            {
+              "match": "''",
+              "name": "constant.character.escape.pros"
+            }
+          ]
+        }
+      ]
+    },
+    "macro-definition": {
+      "name": "meta.function.definition.pros",
+      "begin": "\\b(definition|DEFINITION|define|DEFINE)\\s+([A-Za-z_\\x{00C0}-\\x{00FF}][A-Za-z0-9_\\x{00C0}-\\x{00FF}]*)\\s*(\\()",
+      "end": "\\)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.define.pros"
+        },
+        "2": {
+          "name": "entity.name.function.pros"
+        },
+        "3": {
+          "name": "punctuation.definition.parameters.begin.pros"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.parameters.end.pros"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#comments"
+        },
+        {
+          "match": "[A-Za-z_\\x{00C0}-\\x{00FF}][A-Za-z0-9_\\x{00C0}-\\x{00FF}]*",
+          "name": "variable.parameter.pros"
+        },
+        {
+          "match": ",",
+          "name": "punctuation.separator.parameter.pros"
+        }
+      ]
+    },
+    "macro-end": {
+      "match": "\\b(?:end_definition|END_DEFINITION|fin_definition|FIN_DEFINITION|definition|DEFINITION|end_define|END_DEFINE|define|DEFINE)\\b",
+      "name": "keyword.control.define.pros"
+    },
+    "declarations": {
+      "match": "\\b(local|LOCAL|soit|SOIT|let|LET)\\b(?:\\s+([A-Za-z_\\x{00C0}-\\x{00FF}][A-Za-z0-9_\\x{00C0}-\\x{00FF}]*(?:\\.[A-Za-z_\\x{00C0}-\\x{00FF}][A-Za-z0-9_\\x{00C0}-\\x{00FF}]*)*))?",
+      "captures": {
+        "1": {
+          "name": "storage.type.pros"
+        },
+        "2": {
+          "name": "variable.other.pros"
+        }
+      }
+    },
+    "confml": {
+      "comment": "confML configuration object (reference § 5.17)",
+      "match": "\\b(confML)\\b(?:\\s*(\\.)\\s*(clearBusinessExplanations|getDefaultPricingMethods|raiseBusinessExplanation|getExistingObjectByCPE|saveConfiguration|getPricesOfItems|getBdtTableName|setSimpleOutput|getObjectByCPE|getSimpleInput|isObjectLoaded|isDomainValue|raiseSetValue|setListOutput|getListInput|getSettings|raiseAction|setSettings|getSetting|setSetting)\\b)?",
+      "captures": {
+        "1": {
+          "name": "support.variable.pros"
+        },
+        "2": {
+          "name": "punctuation.accessor.pros"
+        },
+        "3": {
+          "name": "support.function.confml.pros"
+        }
+      }
+    },
+    "java-classes": {
+      "comment": "short closed list of Java classes seen in the manual or in real files",
+      "match": "\\b(?:LinkedHashMap|MLRestClient|ObjectMapper|Integer|Double|String|Long)\\b(?=\\s*[(.])",
+      "name": "support.class.java.pros"
+    },
+    "predefined-objects": {
+      "match": "\\b(?:ACMailMessage|ACDate|ACMail)\\b",
+      "name": "support.class.pros"
+    },
+    "environments": {
+      "comment": "environment addressing (reference § 4.3); racine is also a SQRT synonym, so it is an environment only before a dot",
+      "patterns": [
+        {
+          "match": "\\b(?:root|current|super)\\b",
+          "name": "variable.language.pros"
+        },
+        {
+          "match": "\\bracine\\b(?=\\s*\\.)",
+          "name": "variable.language.pros"
+        }
+      ]
+    },
+    "builtin-functions": {
+      "match": "\\b(?:SqlCloseCreatedPools|remplacer_chaine|REMPLACER_CHAINE|chercher_chaine|CHERCHER_CHAINE|SqlConnectPool2|trouver_chaine|TROUVER_CHAINE|DecimalRound|SqlReadTable|DaysBetween|IsConnected|replace_str|REPLACE_STR|sous_chaine|SOUS_CHAINE|StringFnawk|IsDefined|IsInArray|majuscule|MAJUSCULE|minuscule|MINUSCULE|oteblancs|OTEBLANCS|find_str|FIND_STR|IsNumber|IsObject|IsString|longueur|LONGUEUR|IsArray|IsEqual|version|VERSION|chaine|CHAINE|length|LENGTH|nombre|NOMBRE|number|NUMBER|racine|RACINE|substr|SUBSTR|atan2|ATAN2|carre|CARRE|fract|FRACT|heure|HEURE|lower|LOWER|upper|UPPER|acos|ACOS|aifn|AIFN|asin|ASIN|atan|ATAN|date|DATE|Lpad|Rpad|sqrt|SQRT|time|TIME|trim|TRIM|abs|ABS|Chr|cos|COS|ent|ENT|exp|EXP|int|INT|log|LOG|rpt|RPT|sin|SIN|sqr|SQR|str|STR|tan|TAN|ln|LN)\\b",
+      "name": "support.function.pros"
+    },
+    "table-functions": {
+      "match": "\\b(?:notContains|sum_prod_if|concat_if|notInside|contains|sum_prod|between|prod_if|avg_if|concat|inside|max_if|min_if|sum_if|copy|prod|avg|geq|leq|max|min|neq|sum|eq|gt|lt)\\b(?=\\s*\\()",
+      "name": "support.function.table.pros"
+    },
+    "constraint-operators": {
+      "match": "\\b(?:opNotBetweenStrict|opNotInsideByName|opBetweenStrict|opInsideByName|opNotBetween|opNotInside|opBetween|opNotLike|opInside|opLike|opGeq|opLeq|opNeq|opEq|opGt|opLt)\\b",
+      "name": "support.function.operator.pros"
+    },
+    "control": {
+      "match": "\\b(?:sortie_boucle|SORTIE_BOUCLE|fin_tant_que|FIN_TANT_QUE|sortie_macro|SORTIE_MACRO|exit_macro|EXIT_MACRO|end_while|END_WHILE|exit_loop|EXIT_LOOP|sinon_si|SINON_SI|tant_que|TANT_QUE|else_if|ELSE_IF|jusqu_a|JUSQU_A|repeter|REPETER|end_if|END_IF|fin_si|FIN_SI|repeat|REPEAT|sinon|SINON|until|UNTIL|while|WHILE|else|ELSE|if|IF|si|SI)\\b",
+      "name": "keyword.control.pros"
+    },
+    "commands": {
+      "match": "\\b(?:supprimer_environnement|SUPPRIMER_ENVIRONNEMENT|changer_environnement|CHANGER_ENVIRONNEMENT|creer_environnement|CREER_ENVIRONNEMENT|créer_environnement|change_environment|CHANGE_ENVIRONMENT|create_environment|CREATE_ENVIRONMENT|delete_environment|DELETE_ENVIRONMENT|supprimer_macro|SUPPRIMER_MACRO|environnement|ENVIRONNEMENT|supprimer_var|SUPPRIMER_VAR|delete_macro|DELETE_MACRO|environment|ENVIRONMENT|concat_anc|CONCAT_ANC|delete_var|DELETE_VAR|sql_query|SQL_QUERY|supprimer|SUPPRIMER|trace_fin|TRACE_FIN|trace_off|TRACE_OFF|afficher|AFFICHER|supp_anc|SUPP_ANC|variable|VARIABLE|del_old|DEL_OLD|display|DISPLAY|message|MESSAGE|append|APPEND|delete|DELETE|detail|DETAIL|droite|DROITE|erreur|ERREUR|gauche|GAUCHE|lister|LISTER|error|ERROR|macro|MACRO|right|RIGHT|selon|SELON|trace|TRACE|using|USING|avec|AVEC|dans|DANS|left|LEFT|list|LIST|name|NAME|tout|TOUT|with|WITH|all|ALL|nom|NOM|in|IN)\\b",
+      "name": "keyword.other.pros"
+    },
+    "legacy-keywords": {
+      "comment": "words of the original grammar not found in the documentation, kept on user request",
+      "match": "\\b(?:sql_connect|SQL_CONNECT|lire_table|LIRE_TABLE|read_table|READ_TABLE|arrondi|ARRONDI|memoire|MEMOIRE|ou_excl|OU_EXCL|systeme|SYSTEME|memory|MEMORY|force|FORCE|beep|BEEP|exor|EXOR|mod|MOD)\\b",
+      "name": "keyword.other.pros"
+    },
+    "constants": {
+      "match": "\\b(?:false|FALSE|faux|FAUX|true|TRUE|vrai|VRAI|pi|PI|e|E)\\b",
+      "name": "constant.language.pros"
+    },
+    "numbers": {
+      "comment": "integers and decimals with a dot only (Q-05)",
+      "match": "\\b\\d+(?:\\.\\d+)?\\b",
+      "name": "constant.numeric.pros"
+    },
+    "operators": {
+      "patterns": [
+        {
+          "match": ":=",
+          "name": "keyword.operator.assignment.pros"
+        },
+        {
+          "match": "<>|<=|>=|=|<|>",
+          "name": "keyword.operator.comparison.pros"
+        },
+        {
+          "match": "\\*\\*|\\^|[-+*/%]",
+          "name": "keyword.operator.arithmetic.pros"
+        },
+        {
+          "match": "\\b(?:puissance|PUISSANCE|modulo|MODULO|power|POWER|reste|RESTE|div|DIV)\\b",
+          "name": "keyword.operator.arithmetic.pros"
+        },
+        {
+          "match": "\\b(?:ex_or|EX_OR|and|AND|not|NOT|et|ET|or|OR|ou|OU)\\b",
+          "name": "keyword.operator.logical.pros"
+        }
+      ]
+    },
+    "member-calls": {
+      "comment": "object or Java method call: obj.method(",
+      "match": "(\\.)\\s*([A-Za-z_\\x{00C0}-\\x{00FF}][A-Za-z0-9_\\x{00C0}-\\x{00FF}]*)(?=\\s*\\()",
+      "captures": {
+        "1": {
+          "name": "punctuation.accessor.pros"
+        },
+        "2": {
+          "name": "entity.name.function.member.pros"
+        }
+      }
+    },
+    "function-calls": {
+      "comment": "any other call: user macro, external static method, constructor",
+      "match": "\\b([A-Za-z_\\x{00C0}-\\x{00FF}][A-Za-z0-9_\\x{00C0}-\\x{00FF}]*)(?=\\s*\\()",
+      "captures": {
+        "1": {
+          "name": "entity.name.function.pros"
+        }
+      }
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "match": ",",
+          "name": "punctuation.separator.comma.pros"
+        },
+        {
+          "match": "[()]",
+          "name": "meta.brace.round.pros"
+        },
+        {
+          "match": "[\\[\\]]",
+          "name": "meta.brace.square.pros"
+        }
+      ]
+    }
+  }
 }
