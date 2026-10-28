@@ -14,6 +14,21 @@ Extension Visual Studio Code pour le **langage macro de PROS Smart CPQ**, utilis
 - Snippets pour les structures de contrôle (`IF`, `WHILE`, `REPEAT`, `DEFINE`…), les commandes courantes et les méthodes de l'objet `confML`. Les formes anglaises et françaises sont disponibles.
 - Indentation automatique des blocs : `IF … ELSE_IF … ELSE … END_IF`, `WHILE … END_WHILE`, `REPEAT … UNTIL`, ainsi que leurs formes françaises. Le corps d'une macro reste au niveau de `DEFINE`. Un bloc ouvert et fermé sur la même ligne (`IF x LET y 1 END_IF`) ne décale pas l'indentation.
 - Repli des régions délimitées par `/*#region:nom*/` et `/*#endregion*/`.
+- Complétion :
+  - mots-clés, commandes et fonctions de la référence, avec leurs synonymes français ;
+  - méthodes de `confML` après `confML.` ;
+  - macros et variables du fichier.
+- Survol : syntaxe, paramètres, valeur de retour et page du manuel pour chaque élément du langage ; ligne de définition pour les macros et les variables du fichier.
+- Aide à la signature pour les appels avec parenthèses : fonctions, méthodes de `confML`, constructeurs et macros du fichier.
+- Plan du document (macros, leurs variables, régions) et « Atteindre la définition » pour les macros, y compris dans les autres fichiers `.pros` de l'espace de travail, et pour les variables.
+- Diagnostics :
+  - blocs non fermés ou mal appariés ;
+  - `ELSE` mal placé ;
+  - `EXIT_LOOP` ou `EXIT_MACRO` hors de leur bloc ;
+  - chaînes ou commentaires non fermés ;
+  - mots-clés en casse mixte (`Display`) ;
+  - `//` utilisé comme commentaire ;
+  - commandes qui ne fonctionnent plus sur la plateforme.
 - Thème d'icônes pour les fichiers `.pros`.
 
 ## Installation
@@ -28,17 +43,19 @@ Vous pouvez aussi passer par la palette de commandes : **Extensions : Installer 
 
 ## Limites connues
 
-- L'extension ne propose pas encore de complétion, d'aide au survol ni de diagnostic.
-- Les commandes dépréciées ou désactivées de la plateforme (accès aux fichiers, `EXECUTE`, transactions SQL…) ne sont pas prises en charge : elles ne sont pas coloriées comme des fonctions intégrées.
+- Les commandes dépréciées ou désactivées de la plateforme (accès aux fichiers, `EXECUTE`, transactions SQL…) ne sont ni coloriées comme des fonctions intégrées, ni proposées en complétion. Leur utilisation est signalée par un avertissement.
+- Le type des objets n'est pas suivi : seules les méthodes de `confML` sont proposées en complétion. Pour les autres objets, la méthode est reconnue au survol quand son nom est sans ambiguïté.
+- Les appels de fonctions inconnues ne sont pas signalés : une macro peut venir d'un autre environnement et une méthode statique d'une bibliothèque Java.
 
 ## Développement
 
-Les tests de la grammaire (dossier `test/grammar/`) se lancent avec :
-
 ```bash
 npm install
-npm run test:grammar
+npm run compile      # compile src/ vers out/
+npm test             # tests unitaires (test/unit/) et tests de grammaire (test/grammar/)
 ```
+
+F5 compile puis lance l'extension dans une nouvelle fenêtre VS Code.
 
 ## Signaler un problème
 
