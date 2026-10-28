@@ -1,69 +1,77 @@
-# PROS : langage macro pour VS Code
+# PROS: macro language for VS Code
 
-Extension Visual Studio Code pour le **langage macro de PROS Smart CPQ**, utilisé notamment dans les règles « Macro-Based BRC » de PROS Connect. Elle s'applique aux fichiers `.pros`.
+Visual Studio Code extension for the **PROS Smart CPQ macro language**, used in particular in the "Macro-Based BRC" rules of PROS Connect. It applies to `.pros` files.
 
-## Fonctionnalités
+## Features
 
-- Coloration syntaxique des fichiers `.pros`, avec des scopes TextMate standard compatibles avec tous les thèmes. Sont reconnus :
-  - les mots-clés anglais et français, en majuscules ou en minuscules ;
-  - les définitions et appels de macros ;
-  - les fonctions intégrées (`IsDefined`, `DecimalRound`, `FIND_STR`…), les fonctions de tableaux et les opérateurs de contrainte `op*` ;
-  - l'objet `confML` et ses méthodes ;
-  - les appels de méthodes Java (`obj.put(…)`) et les classes Java courantes (`Integer`, `LinkedHashMap`…) ;
-  - les chaînes, avec échappement par doublement (`""`, `''`), et les commentaires `/* … */`.
-- Indentation automatique des blocs : `IF … ELSE_IF … ELSE … END_IF`, `WHILE … END_WHILE`, `REPEAT … UNTIL`, ainsi que leurs formes françaises. Le corps d'une macro reste au niveau de `DEFINE`. Un bloc ouvert et fermé sur la même ligne (`IF x LET y 1 END_IF`) ne décale pas l'indentation.
-- Repli des régions délimitées par `/*#region:nom*/` et `/*#endregion*/`.
-- Complétion (elle remplace les anciens snippets) :
-  - **Blocs** : `DEFINE`, `IF`, `ELSE_IF`, `ELSE`, `WHILE`, `REPEAT` et leurs formes françaises (`DEFINITION`, `SI`, `SINON_SI`, `SINON`, `TANT_QUE`, `REPETER`) insèrent le bloc complet, fermeture comprise. La touche Tab passe d'un champ à l'autre.
-  - **Variantes** : `IF … ELSE`, `IF … ELSE_IF … ELSE`, `SI … SINON` et `SI … SINON_SI … SINON` insèrent un bloc avec ses branches.
-  - **Casse** : les mots-clés sont insérés dans la casse que vous avez commencé à taper, en minuscules si vous tapez en minuscules et en majuscules sinon, jamais en casse mixte.
-  - **Fonctions et commandes** : l'appel est inséré avec un champ par paramètre, selon la syntaxe documentée. Par exemple `Lpad(string, lengthString, append)` ou `SQL_QUERY requête IN "tableau"`. Les paramètres facultatifs n'ont pas de champ.
-  - Méthodes de `confML` après `confML.`, avec un champ par paramètre.
-  - Macros (avec leurs paramètres) et variables du fichier.
-  - `#region` : insère une paire `/*#region:nom*/` … `/*#endregion*/`.
-- Survol : syntaxe, paramètres, valeur de retour et page du manuel pour chaque élément du langage ; ligne de définition pour les macros et les variables du fichier.
-- Aide à la signature pour les appels avec parenthèses : fonctions, méthodes de `confML`, constructeurs et macros du fichier.
-- Plan du document (macros, leurs variables, régions) et « Atteindre la définition » pour les macros, y compris dans les autres fichiers `.pros` de l'espace de travail, et pour les variables.
-- Diagnostics :
-  - blocs non fermés ou mal appariés ;
-  - `ELSE` mal placé ;
-  - `EXIT_LOOP` ou `EXIT_MACRO` hors de leur bloc ;
-  - chaînes ou commentaires non fermés ;
-  - mots-clés en casse mixte (`Display`) ;
-  - `//` utilisé comme commentaire ;
-  - commandes qui ne fonctionnent plus sur la plateforme.
-- Thème d'icônes pour les fichiers `.pros`.
+- Syntax highlighting of `.pros` files, with standard TextMate scopes that work with every theme. It recognizes:
+  - English and French keywords, in upper or lower case;
+  - macro definitions and calls;
+  - built-in functions (`IsDefined`, `DecimalRound`, `FIND_STR`…), table functions and `op*` constraint operators;
+  - the `confML` object and its methods;
+  - Java method calls (`obj.put(…)`) and common Java classes (`Integer`, `LinkedHashMap`…);
+  - strings, escaped by doubling the quote (`""`, `''`), and `/* … */` comments.
+- Automatic indentation of blocks: `IF … ELSE_IF … ELSE … END_IF`, `WHILE … END_WHILE`, `REPEAT … UNTIL` and their French forms. The macro body stays at the `DEFINE` level. A block opened and closed on the same line (`IF x LET y 1 END_IF`) does not change the indentation.
+- Folding of regions delimited by `/*#region:name*/` and `/*#endregion*/`.
+- Completion:
+  - **Blocks**: `DEFINE`, `IF`, `ELSE_IF`, `ELSE`, `WHILE`, `REPEAT` and their French forms (`DEFINITION`, `SI`, `SINON_SI`, `SINON`, `TANT_QUE`, `REPETER`) insert the whole block, closing keyword included. Tab moves from one field to the next.
+  - **Variants**: `IF … ELSE`, `IF … ELSE_IF … ELSE`, `SI … SINON` and `SI … SINON_SI … SINON` insert a block with its branches.
+  - **Case**: keywords are inserted in the case you started typing (lower case if you type in lower case, upper case otherwise), never in mixed case.
+  - **Functions and commands**: the call is inserted with one field per parameter, following the documented syntax, e.g. `Lpad(string, lengthString, append)` or `SQL_QUERY query IN "table"`. Optional parameters get no field.
+  - `confML` methods after `confML.`, with one field per parameter.
+  - Macros (with their parameters) and variables of the file.
+  - `#region`: inserts a `/*#region:name*/` … `/*#endregion*/` pair.
+- Hover: syntax, parameters, return value and manual page for every element of the language; definition line for the macros and variables of the file.
+- Signature help for calls with parentheses: functions, `confML` methods, constructors and macros of the file.
+- Document outline (macros, their variables, regions) and "Go to Definition" for macros, including in the other `.pros` files of the workspace, and for variables.
+- Diagnostics:
+  - unclosed or mismatched blocks;
+  - misplaced `ELSE`;
+  - `EXIT_LOOP` or `EXIT_MACRO` outside their block;
+  - unclosed strings or comments;
+  - mixed case keywords (`Display`);
+  - `//` used as a comment;
+  - commands that no longer work on the platform.
+- File icon theme for `.pros` files.
 
 ## Installation
 
-Depuis un fichier `.vsix` :
+From a `.vsix` file:
 
 ```bash
 code --install-extension pros-<version>.vsix
 ```
 
-Vous pouvez aussi passer par la palette de commandes : **Extensions : Installer à partir d'un VSIX…**
+You can also use the command palette: **Extensions: Install from VSIX…**
 
-## Limites connues
+## Known limitations
 
-- Les commandes dépréciées ou désactivées de la plateforme (accès aux fichiers, `EXECUTE`, transactions SQL…) ne sont ni coloriées comme des fonctions intégrées, ni proposées en complétion. Leur utilisation est signalée par un avertissement.
-- Le type des objets n'est pas suivi : seules les méthodes de `confML` sont proposées en complétion. Pour les autres objets, la méthode est reconnue au survol quand son nom est sans ambiguïté.
-- Les appels de fonctions inconnues ne sont pas signalés : une macro peut venir d'un autre environnement et une méthode statique d'une bibliothèque Java.
+- Deprecated or disabled platform commands (file access, `EXECUTE`, SQL transactions…) are not highlighted as built-in functions and are not offered by the completion. Using them raises a warning.
+- Object types are not tracked: only `confML` methods are offered by the completion. For other objects, a method is recognized on hover when its name is unambiguous.
+- Calls to unknown functions are not reported: a macro may come from another environment and a static method from a Java library.
 
-## Développement
+## Development
 
 ```bash
 npm install
-npm run compile      # compile src/ vers out/
-npm test             # tests unitaires (test/unit/) et tests de grammaire (test/grammar/)
+npm run compile      # compiles src/ into out/
+npm test             # unit tests (test/unit/) and grammar tests (test/grammar/)
 ```
 
-F5 compile puis lance l'extension dans une nouvelle fenêtre VS Code.
+F5 compiles and then launches the extension in a new VS Code window.
 
-## Signaler un problème
+To build the `.vsix` file:
+
+```bash
+npx @vscode/vsce package
+```
+
+On every push to `main`, the GitHub Actions workflow runs the tests and publishes the `.vsix` as a build artifact.
+
+## Reporting an issue
 
 https://github.com/NilsBzH/pros/issues
 
-## Licence
+## License
 
-GPL-2.0 : voir [LICENSE](LICENSE).
+GPL-2.0: see [LICENSE](LICENSE).
