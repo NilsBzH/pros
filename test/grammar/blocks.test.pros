@@ -1,0 +1,97 @@
+# SYNTAX TEST "source.pros" "blocks, French forms, lower case, one-line IF"
+DEFINE computeMax(a, b)
+# <------ keyword.control.define.pros
+#      ^^^^^^^^^^ entity.name.function.pros
+#                 ^ variable.parameter.pros
+#                    ^ variable.parameter.pros
+LOCAL result 0
+# <----- storage.type.pros
+#     ^^^^^^ variable.other.pros
+IF (a > b)
+# <-- keyword.control.pros
+    LET result a
+#   ^^^ storage.type.pros
+#       ^^^^^^ variable.other.pros
+ELSE_IF a = b
+# <------- keyword.control.pros
+    LET result 0
+#   ^^^ storage.type.pros
+ELSE
+# <---- keyword.control.pros
+    LET result b
+#   ^^^ storage.type.pros
+END_IF
+# <------ keyword.control.pros
+IF a = 5 AND b = 10 EXIT_MACRO END_IF
+# <-- keyword.control.pros
+#        ^^^ keyword.operator.logical.pros
+#                   ^^^^^^^^^^ keyword.control.pros
+#                              ^^^^^^ keyword.control.pros
+LET computeMax result
+#   ^^^^^^^^^^ variable.other.pros
+END_DEFINE
+# <---------- keyword.control.define.pros
+DEFINITION boucles()
+# <---------- keyword.control.define.pros
+#          ^^^^^^^ entity.name.function.pros
+SOIT i 1
+# <---- storage.type.pros
+#    ^ variable.other.pros
+TANT_QUE i <= 10
+# <-------- keyword.control.pros
+#          ^^ keyword.operator.comparison.pros
+    SI i = 5 ET j = 2 SORTIE_BOUCLE FIN_SI
+#   ^^ keyword.control.pros
+#            ^^ keyword.operator.logical.pros
+#                     ^^^^^^^^^^^^^ keyword.control.pros
+#                                   ^^^^^^ keyword.control.pros
+    SI i = 3
+#   ^^ keyword.control.pros
+        AFFICHER i
+#       ^^^^^^^^ keyword.other.pros
+    SINON_SI i = 4
+#   ^^^^^^^^ keyword.control.pros
+        AFFICHER i
+#       ^^^^^^^^ keyword.other.pros
+    SINON
+#   ^^^^^ keyword.control.pros
+        SOIT i i + 1
+#       ^^^^ storage.type.pros
+    FIN_SI
+#   ^^^^^^ keyword.control.pros
+FIN_TANT_QUE
+# <------------ keyword.control.pros
+REPETER
+# <------- keyword.control.pros
+    LET i i - 1
+#           ^ keyword.operator.arithmetic.pros
+JUSQU_A (i = 0)
+# <------- keyword.control.pros
+FIN_DEFINITION
+# <-------------- keyword.control.define.pros
+define minuscules()
+# <------ keyword.control.define.pros
+#      ^^^^^^^^^^ entity.name.function.pros
+if x = 1 or y = 2
+# <-- keyword.control.pros
+#        ^^ keyword.operator.logical.pros
+    display "ok"
+#   ^^^^^^^ keyword.other.pros
+end_if
+# <------ keyword.control.pros
+repeat
+# <------ keyword.control.pros
+    exit_loop
+#   ^^^^^^^^^ keyword.control.pros
+until(x = 1)
+# <----- keyword.control.pros
+while x < 3
+# <----- keyword.control.pros
+end_while
+# <--------- keyword.control.pros
+end_define
+# <---------- keyword.control.define.pros
+Display x
+# <------- - keyword.other.pros
+End_If
+# <------ - keyword.control.pros

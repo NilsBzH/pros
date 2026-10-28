@@ -1,0 +1,56 @@
+# SYNTAX TEST "source.pros" "strings and comments"
+LET s "il dit ""bonjour"""
+#     ^^^^^^^^ string.quoted.double.pros
+#             ^^ constant.character.escape.pros
+#                      ^^ constant.character.escape.pros
+LET t 'it''s hot'
+#     ^^^ string.quoted.single.pros
+#        ^^ constant.character.escape.pros
+LET u "it's fine"
+#     ^^^^^^^^^^^ string.quoted.double.pros
+LET path "c:\temp\"
+#        ^^^^^^^^^^ string.quoted.double.pros
+LET after 1
+# <--- storage.type.pros
+#         ^ constant.numeric.pros
+LET multi "first line
+#         ^^^^^^^^^^^ string.quoted.double.pros
+second line"
+# <------------ string.quoted.double.pros
+LET after2 2
+# <--- storage.type.pros
+# <--- - string.quoted.double.pros
+LET q "SELECT A FROM T WHERE B = '" + x + "'"
+#                              ^^^ string.quoted.double.pros
+#                                     ^ - string.quoted.double.pros
+/* simple comment */
+# <-------------------- comment.block.pros
+LET x 1 /* trailing comment */
+#       ^^^^^^^^^^^^^^^^^^^^^^ comment.block.pros
+#     ^ constant.numeric.pros
+/*ELSE_IF x = "A2L"
+# ^^^^^^^ comment.block.pros
+# ^^^^^^^ - keyword.control.pros
+    LET y 2*/ /* second comment */
+#   ^^^ comment.block.pros
+#             ^^^^^^^^^^^^^^^^^^^^ comment.block.pros
+IF (a = TRUE) /*AND (b < 3)*/
+# <-- keyword.control.pros
+#               ^^^ comment.block.pros
+#       ^^^^ constant.language.pros
+/* LOCAL u "https://example.org/x" <--- test URL */
+#                 ^^ comment.block.pros
+#  ^^^^^ - storage.type.pros
+LET z 3 // not a comment
+#       ^^ keyword.operator.arithmetic.pros
+#       ^^ - comment.block.pros
+LET tab["NR"] 2
+#       ^^^^ constant.other.array-key.pros
+LET tab[1,"NF"] 3
+#         ^^^^ constant.other.array-key.pros
+LET result[0, 'OP'] "true"
+#             ^^^^ constant.other.array-key.pros
+#                   ^^^^^^ string.quoted.double.pros
+LET label "NR"
+#         ^^^^ string.quoted.double.pros
+#         ^^^^ - constant.other.array-key.pros

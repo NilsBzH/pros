@@ -1,0 +1,66 @@
+# SYNTAX TEST "source.pros" "built-in functions, table functions, exclusions, legacy words"
+IF IsDefined(descr)
+#  ^^^^^^^^^ support.function.pros
+IF IsInArray(x)
+#  ^^^^^^^^^ support.function.pros
+LET r DecimalRound(2, a)
+#     ^^^^^^^^^^^^ support.function.pros
+LET s Lpad("aze", 5, "b")
+#     ^^^^ support.function.pros
+StringFnawk(myString, ":", "tab")
+# <----------- support.function.pros
+IF FIND_STR code "siNA" = 0
+#  ^^^^^^^^ support.function.pros
+#                       ^ keyword.operator.comparison.pros
+LET s REPLACE_STR descr "(KIT)" (" - code : " + kit)
+#     ^^^^^^^^^^^ support.function.pros
+LET n NUMBER count
+#     ^^^^^^ support.function.pros
+LET s SOUS_CHAINE "abc" 2 1
+#     ^^^^^^^^^^^ support.function.pros
+LET p CHERCHER_CHAINE 3 "abcdef" "d"
+#     ^^^^^^^^^^^^^^^ support.function.pros
+LET s str a
+#     ^^^ support.function.pros
+LET bad isdefined(x)
+#       ^^^^^^^^^ - support.function.pros
+#       ^^^^^^^^^ entity.name.function.pros
+SqlReadTable(2, "query1", "tabResult")
+# <------------ support.function.pros
+sum_if("tab1", eq("x"), "tab2", "result")
+# <------ support.function.table.pros
+#              ^^ support.function.table.pros
+LET total sum("result", "final")
+#         ^^^ support.function.table.pros
+LET op opNotInsideByName("criterion")
+#      ^^^^^^^^^^^^^^^^^ support.function.operator.pros
+LET op opBetween(lb, ub)
+#      ^^^^^^^^^ support.function.operator.pros
+DELETE "tab"
+# <------ keyword.other.pros
+ERROR 2 "message"
+# <----- keyword.other.pros
+MESSAGE "warning"
+# <------- keyword.other.pros
+TRACE_OFF
+# <--------- keyword.other.pros
+OPEN_FILE 1 "r" "toto"
+# <--------- - keyword.other.pros
+# <--------- - support.function.pros
+LET c ReadFile("toto.txt")
+#     ^^^^^^^^ - support.function.pros
+#     ^^^^^^^^ entity.name.function.pros
+SAVE MACRO "file"
+# <---- - keyword.other.pros
+EXECUTE a
+# <------- - keyword.other.pros
+# <------- - support.function.pros
+EnableTrace()
+# <----------- - support.function.pros
+LET x ARRONDI y
+#     ^^^^^^^ keyword.other.pros
+LET x OU_EXCL y
+#     ^^^^^^^ keyword.other.pros
+#     ^^^^^^^ - keyword.operator.logical.pros
+LET x sql_connect
+#     ^^^^^^^^^^^ keyword.other.pros

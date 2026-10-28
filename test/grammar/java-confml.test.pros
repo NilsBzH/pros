@@ -1,0 +1,47 @@
+# SYNTAX TEST "source.pros" "Java calls, confML, macro calls"
+LOCAL rootMap LinkedHashMap()
+#             ^^^^^^^^^^^^^ support.class.java.pros
+rootMap.put("id", value)
+# <------- - entity.name.function.pros
+#       ^^^ entity.name.function.member.pros
+LET size list.size()
+#             ^^^^ entity.name.function.member.pros
+LET item list.get(Integer(STR(j)))
+#             ^^^ entity.name.function.member.pros
+#                 ^^^^^^^ support.class.java.pros
+#                         ^^^ support.function.pros
+LET text item.toString()
+#             ^^^^^^^^ entity.name.function.member.pros
+LET n Integer.parseInt(code)
+#     ^^^^^^^ support.class.java.pros
+#             ^^^^^^^^ entity.name.function.member.pros
+LET op opEq(Long(STR ms))
+#      ^^^^ support.function.operator.pros
+#           ^^^^ support.class.java.pros
+LET mapper ObjectMapper()
+#          ^^^^^^^^^^^^ support.class.java.pros
+LET json mapper.writeValueAsString(rootMap)
+#               ^^^^^^^^^^^^^^^^^^ entity.name.function.member.pros
+LOCAL client MLRestClient("default")
+#            ^^^^^^^^^^^^ support.class.java.pros
+LOCAL arr ConfUtils_BuildMap(confML, cpeIn, rootMap)
+#         ^^^^^^^^^^^^^^^^^^ entity.name.function.pros
+#                            ^^^^^^ support.variable.pros
+LET v confML.getObjectByCPE("CPE." + x + ".value")
+#     ^^^^^^ support.variable.pros
+#            ^^^^^^^^^^^^^^ support.function.confml.pros
+#                           ^^^^^^ string.quoted.double.pros
+LET t confML.getBdtTableName("BDT_NAME")
+#            ^^^^^^^^^^^^^^^ support.function.confml.pros
+TRACE DEL_OLD "/" + confML.getSetting("CPE.Settings.User.Identifier") + "/trace.txt"
+# <----- keyword.other.pros
+#     ^^^^^^^ keyword.other.pros
+#                          ^^^^^^^^^^ support.function.confml.pros
+LET code childMacro(("COL" + name2), model, brcName)
+#        ^^^^^^^^^^ entity.name.function.pros
+LET d ACDate()
+#     ^^^^^^ support.class.pros
+DISPLAY d.getDate("yyyy-MM-dd")
+#         ^^^^^^^ entity.name.function.member.pros
+LET days DaysBetween(d1, d2)
+#        ^^^^^^^^^^^ support.function.pros

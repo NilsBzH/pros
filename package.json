@@ -61,5 +61,11 @@
   "bugs": {
     "url": "https://github.com/NilsBzH/pros/issues"
   },
-  "homepage": "https://github.com/NilsBzH/pros#readme"
+  "homepage": "https://github.com/NilsBzH/pros#readme",
+  "devDependencies": {
+    "vscode-tmgrammar-test": "^0.1.3"
+  },
+  "scripts": {
+    "test:grammar": "vscode-tmgrammar-test \"test/grammar/*.test.pros\""
+  }
 }

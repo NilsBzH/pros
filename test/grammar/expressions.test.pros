@@ -1,0 +1,55 @@
+# SYNTAX TEST "source.pros" "numbers, operators, constants, continuation lines"
+LET a 5
+#     ^ constant.numeric.pros
+LET b 3.14
+#     ^^^^ constant.numeric.pros
+LET num123 a
+#   ^^^^^^ variable.other.pros
+#      ^^^ - constant.numeric.pros
+a := b + c * d / e
+# ^^ keyword.operator.assignment.pros
+#      ^ keyword.operator.arithmetic.pros
+#          ^ keyword.operator.arithmetic.pros
+#              ^ keyword.operator.arithmetic.pros
+LET p a ** 2 + b ^ 3 + c % 7
+#       ^^ keyword.operator.arithmetic.pros
+#                ^ keyword.operator.arithmetic.pros
+#                        ^ keyword.operator.arithmetic.pros
+LET q 7 DIV 3 + 7 MODULO 3 + 2 POWER 3
+#       ^^^ keyword.operator.arithmetic.pros
+#                 ^^^^^^ keyword.operator.arithmetic.pros
+#                              ^^^^^ keyword.operator.arithmetic.pros
+IF a <> b OR a >= c OR NOT d EX_OR e
+#    ^^ keyword.operator.comparison.pros
+#         ^^ keyword.operator.logical.pros
+#              ^^ keyword.operator.comparison.pros
+#                      ^^^ keyword.operator.logical.pros
+#                            ^^^^^ keyword.operator.logical.pros
+IF a = 1 OU b = 2
+#        ^^ keyword.operator.logical.pros
+LET ok (tab["NR"] > 0)
+#                 ^ keyword.operator.comparison.pros
+LET v TRUE
+#     ^^^^ constant.language.pros
+LET w faux
+#     ^^^^ constant.language.pros
+LET c 2 * PI
+#         ^^ constant.language.pros
+DISPLAY super.var1
+# <------- keyword.other.pros
+#       ^^^^^ variable.language.pros
+DISPLAY root.env2.var1
+#       ^^^^ variable.language.pros
+DISPLAY racine.env1.var1
+#       ^^^^^^ variable.language.pros
+LET r RACINE 25
+#     ^^^^^^ support.function.pros
+LET query "SELECT A FROM " + base + " WHERE"
+#                          ^ keyword.operator.arithmetic.pros
+        + " AND B LIKE '%" + x + "%'"
+#       ^ keyword.operator.arithmetic.pros
+#         ^^^^^^^ string.quoted.double.pros
+SQL_QUERY query IN "queryResult"
+# <--------- keyword.other.pros
+#               ^^ keyword.other.pros
+#                  ^^^^^^^^^^^^^ string.quoted.double.pros
