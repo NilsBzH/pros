@@ -28,7 +28,7 @@ LET q "SELECT A FROM T WHERE B = '" + x + "'"
 LET x 1 /* trailing comment */
 #       ^^^^^^^^^^^^^^^^^^^^^^ comment.block.pros
 #     ^ constant.numeric.pros
-/*ELSE_IF x = "A2L"
+/*ELSE_IF x = "B1"
 # ^^^^^^^ comment.block.pros
 # ^^^^^^^ - keyword.control.pros
     LET y 2*/ /* second comment */

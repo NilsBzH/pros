@@ -9,10 +9,10 @@ LET s Lpad("aze", 5, "b")
 #     ^^^^ support.function.pros
 StringFnawk(myString, ":", "tab")
 # <----------- support.function.pros
-IF FIND_STR code "siNA" = 0
+IF FIND_STR code "OPT" = 0
 #  ^^^^^^^^ support.function.pros
-#                       ^ keyword.operator.comparison.pros
-LET s REPLACE_STR descr "(KIT)" (" - code : " + kit)
+#                      ^ keyword.operator.comparison.pros
+LET s REPLACE_STR descr "(TAG)" (" - code : " + kit)
 #     ^^^^^^^^^^^ support.function.pros
 LET n NUMBER count
 #     ^^^^^^ support.function.pros
