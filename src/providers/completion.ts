@@ -1,9 +1,13 @@
 // Completion: language reference (excluded entries left out), confML methods after "confML.", macros and variables of the document.
+// Block keywords insert the whole block and calls get one field per parameter (see completionItems.ts);
+// this replaces the former snippets file.
 import * as vscode from 'vscode';
-import { Entry, EntryKind, entries, methodsOf } from '../data/reference';
+import { EntryKind } from '../data/reference';
+import { CompletionSpec, REGION_LABEL, caseModeFor, globalSpecs, macroSnippet, methodSpecs } from './completionItems';
 import { entryMarkdown, getAnalysis, inStringOrComment, macroLabel } from './shared';
 
-const KIND: Record<EntryKind, vscode.CompletionItemKind> = {
+const KIND: Record<EntryKind | 'block', vscode.CompletionItemKind> = {
+  block: vscode.CompletionItemKind.Keyword,
   keyword: vscode.CompletionItemKind.Keyword,
   command: vscode.CompletionItemKind.Keyword,
   function: vscode.CompletionItemKind.Function,
@@ -15,33 +19,21 @@ const KIND: Record<EntryKind, vscode.CompletionItemKind> = {
   object: vscode.CompletionItemKind.Variable,
 };
 
-const SORT: Record<Entry['status'], string> = { documented: '1', undocumented: '2', legacy: '3', excluded: '9' };
+const WORD = /[A-Za-z_À-ÿ][A-Za-z0-9_À-ÿ]*/;
 
-function insertText(entry: Entry, label: string): string | vscode.SnippetString {
-  if (entry.style !== 'paren') {
-    return label;
+function toItem(spec: CompletionSpec): vscode.CompletionItem {
+  const item = new vscode.CompletionItem(spec.label, KIND[spec.kind]);
+  item.detail = spec.kind === 'block' ? `bloc — ${spec.detail}` : spec.detail;
+  if (spec.entry) {
+    item.documentation = entryMarkdown(spec.entry);
   }
-  return entry.params && entry.params.length === 0 ? `${label}()` : new vscode.SnippetString(`${label}($0)`);
+  item.insertText = spec.snippet === spec.label ? spec.label : new vscode.SnippetString(spec.snippet);
+  item.sortText = spec.sortText;
+  return item;
 }
-
-function entryItems(entry: Entry): vscode.CompletionItem[] {
-  // Canonical name and synonyms; lower case forms are left to the user (convention: upper case).
-  return [entry.name, ...(entry.synonyms ?? [])].map(label => {
-    const item = new vscode.CompletionItem(label, KIND[entry.kind]);
-    item.detail = label === entry.name ? entry.syntax : `${entry.syntax}  (synonyme de ${entry.name})`;
-    item.documentation = entryMarkdown(entry);
-    item.insertText = insertText(entry, label);
-    item.sortText = `${SORT[entry.status]}${label}`;
-    return item;
-  });
-}
-
-const globalItems = entries
-  .filter(e => !e.receiver && e.status !== 'excluded')
-  .flatMap(entryItems);
 
 export class ProsCompletionProvider implements vscode.CompletionItemProvider {
-  provideCompletionItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] | undefined {
+  provideCompletionItems(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionList | undefined {
     const analysis = getAnalysis(document);
     if (inStringOrComment(analysis, document.offsetAt(position))) {
       return undefined;
@@ -51,14 +43,31 @@ export class ProsCompletionProvider implements vscode.CompletionItemProvider {
     const member = /([A-Za-z_][A-Za-z0-9_]*)\s*\.\s*[A-Za-z0-9_]*$/.exec(linePrefix);
     if (member) {
       // Only confML has a known type; other objects fall back to the editor word completion.
-      return member[1] === 'confML' ? methodsOf('confML').flatMap(entryItems) : undefined;
+      return member[1] === 'confML' ? new vscode.CompletionList(methodSpecs('confML').map(toItem)) : undefined;
     }
 
-    const items = [...globalItems];
+    // Keywords are inserted in the case of the typed prefix; with no prefix yet, the list is
+    // recomputed at the next keystroke so that the case of the first letter is taken into account.
+    const wordRange = document.getWordRangeAtPosition(position, WORD);
+    const start = wordRange ? wordRange.start : position;
+    const prefix = document.getText(new vscode.Range(start, position));
+    // "#" is not a word character: when "#reg" is typed, the region item also replaces the "#".
+    const hash = start.character > 0 && document.lineAt(position).text[start.character - 1] === '#' ? start.translate(0, -1) : undefined;
+    const items = globalSpecs(caseModeFor(prefix)).map(spec => {
+      const item = toItem(spec);
+      if (spec.label === REGION_LABEL) {
+        item.filterText = hash ? REGION_LABEL : 'region';
+        if (hash) {
+          item.range = new vscode.Range(hash, position);
+        }
+      }
+      return item;
+    });
+
     for (const macro of analysis.macros) {
       const item = new vscode.CompletionItem(macro.name, vscode.CompletionItemKind.Function);
       item.detail = `macro ${macroLabel(macro)}`;
-      item.insertText = new vscode.SnippetString(`${macro.name}($0)`);
+      item.insertText = new vscode.SnippetString(macroSnippet(macro.name, macro.params.map(p => p.text)));
       item.sortText = `0${macro.name}`;
       items.push(item);
     }
@@ -73,6 +82,6 @@ export class ProsCompletionProvider implements vscode.CompletionItemProvider {
       item.sortText = `0${variable.name}`;
       items.push(item);
     }
-    return items;
+    return new vscode.CompletionList(items, prefix === '');
   }
 }

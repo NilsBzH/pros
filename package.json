@@ -1,7 +1,7 @@
 {
   "name": "pros",
   "displayName": "PROS",
-  "description": "PROS CPQ macro language support (Macro-Based BRC): syntax highlighting, snippets, indentation",
+  "description": "PROS CPQ macro language support (Macro-Based BRC): syntax highlighting, completion, hover, diagnostics",
   "publisher": "NilsBzH",
   "version": "0.0.1",
   "license": "GPL-2.0-only",
@@ -45,12 +45,6 @@
         "language": "pros",
         "scopeName": "source.pros",
         "path": "./syntaxes/pros.tmLanguage.json"
-      }
-    ],
-    "snippets": [
-      {
-        "language": "pros",
-        "path": "./snippets/pros.code-snippets"
       }
     ]
   },
