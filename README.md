@@ -2,6 +2,10 @@
 
 Visual Studio Code extension for the **PROS Smart CPQ macro language**, used in particular in the "Macro-Based BRC" rules of PROS Connect. It applies to `.pros` files.
 
+> **Unofficial extension.** This is a community project. It is not affiliated with, endorsed by or supported by PROS. "PROS" and "Smart CPQ" are only used to name the language the extension supports.
+>
+> No content of the PROS documentation is included: the descriptions shown by the completion and the hover are short summaries written for this extension, with a reference to the page of the manual where the details can be found.
+
 ## Features
 
 - Syntax highlighting of `.pros` files, with standard TextMate scopes that work with every theme. It recognizes:

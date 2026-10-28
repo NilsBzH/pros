@@ -17,6 +17,7 @@ CLAUDE.md
 ## node.js
 node_modules
 out/
+*.vsix
 lib-cov
 
 ## coffeescript

@@ -1,17 +1,20 @@
 {
   "name": "pros",
-  "displayName": "PROS",
-  "description": "PROS CPQ macro language support (Macro-Based BRC): syntax highlighting, completion, hover, diagnostics",
-  "publisher": "NilsBzH",
+  "displayName": "PROS Macro Language (unofficial)",
+  "description": "Unofficial support for the PROS Smart CPQ macro language (Macro-Based BRC): syntax highlighting, completion, hover, signature help, outline and diagnostics.",
+  "publisher": "nilsbzh",
   "version": "0.1.0",
   "license": "GPL-2.0-only",
   "icon": "images/icon.png",
   "keywords": [
     "pros",
-    "cpq",
+    "pros cpq",
     "smart cpq",
+    "cpq",
     "macro",
+    "macro language",
     "brc",
+    "business rules",
     "pros connect"
   ],
   "engines": {
