@@ -8,6 +8,37 @@
         ],
         "description": "If ... PROS"
     },
+    "IfElse": {
+        "prefix": "ifElse",
+        "body": [
+            "IF ${1:condition}",
+            "\t${2}",
+            "ELSE",
+            "\t$0",
+            "END_IF"
+        ],
+        "description": "If ... Else ... PROS"
+    },
+    "IfElseIf": {
+        "prefix": "ifElseIf",
+        "body": [
+            "IF ${1:condition}",
+            "\t${2}",
+            "ELSE_IF ${3:condition}",
+            "\t${4}",
+            "ELSE",
+            "\t$0",
+            "END_IF"
+        ],
+        "description": "If ... ElseIf ... Else ... PROS"
+    },
+    "IfLine": {
+        "prefix": "ifLine",
+        "body": [
+            "IF ${1:condition} ${2:instruction} END_IF"
+        ],
+        "description": "If ... End_If on one line ... PROS"
+    },
     "Else": {
 		"prefix": "else",
 		"body": [
@@ -19,7 +50,8 @@
     "ElseIf": {
 		"prefix": "elseIf",
 		"body": [
-			"ELSE_IF "
+			"ELSE_IF ${1:condition}",
+			"\t$0"
 		],
 		"description": "ElseIf ... PROS"
 	},
@@ -51,14 +83,14 @@
         "body": [
             "REPEAT",
             "\t$0",
-            "UNTIL ${1:statement}"
+            "UNTIL (${1:condition})"
         ],
-        "description": "While ... PROS"
+        "description": "Repeat ... Until ... PROS"
     },
     "Until": {
 		"prefix": "until",
 		"body": [
-			"UNTIL ${1:statement}"
+			"UNTIL (${1:condition})"
 		],
 		"description": "Until ... PROS"
 	},
@@ -68,6 +100,13 @@
 			"EXIT_LOOP"
 		],
 		"description": "ExitLoop ... PROS"
+	},
+    "ExitMacro": {
+		"prefix": "exitMacro",
+		"body": [
+			"EXIT_MACRO"
+		],
+		"description": "ExitMacro ... PROS"
 	},
     "true": {
 		"prefix": "true",
@@ -114,8 +153,8 @@
     "define": {
 		"prefix": "define",
 		"body": [
-			"DEFINE ${1:brc}()",
-            "\t$0",
+			"DEFINE ${1:brc}(${2})",
+            "$0",
             "END_DEFINE"
 		],
 		"description": "define ... PROS"
@@ -130,9 +169,16 @@
     "trace": {
 		"prefix": "trace",
 		"body": [
-			"TRACE "
+			"TRACE ${1|DEL_OLD,CONCAT_ANC|} ${2:file}"
 		],
-		"description": "not ... PROS"
+		"description": "trace ... PROS"
+	},
+    "traceOff": {
+		"prefix": "traceOff",
+		"body": [
+			"TRACE_OFF"
+		],
+		"description": "traceOff ... PROS"
 	},
     "Local": {
 		"prefix": "local",
@@ -151,7 +197,7 @@
     "Delete": {
 		"prefix": "delete",
 		"body": [
-			"DELETE ${1:name}"
+			"DELETE \"${1:name}\""
 		],
 		"description": "Delete ... PROS"
 	},
@@ -179,7 +225,7 @@
     "Error": {
 		"prefix": "error",
 		"body": [
-			"ERROR ${TM_SELECTED_TEXT}"
+			"ERROR ${1:status} ${TM_SELECTED_TEXT:${2:message}}"
 		],
 		"description": "Error ... PROS"
 	},
@@ -214,9 +260,16 @@
     "IsEqual": {
 		"prefix": "isEqual",
 		"body": [
-			"IsEqual(${1:expression})"
+			"IsEqual(${1:expression}, ${2:value})"
 		],
 		"description": "IsEqual ... PROS"
+	},
+    "IsNumber": {
+		"prefix": "isNumber",
+		"body": [
+			"IsNumber(${1:expression})"
+		],
+		"description": "IsNumber ... PROS"
 	},
     "IsInArray": {
 		"prefix": "isInArray",
@@ -272,12 +325,12 @@
 		"body": [
 			"LOWER(${TM_SELECTED_TEXT:${1:string}})"
 		],
-		"description": "upper ... PROS"
+		"description": "lower ... PROS"
 	},
     "trim": {
 		"prefix": "trim",
 		"body": [
-			"TRIM ${1:option} ${2:string}"
+			"TRIM ${1:string}"
 		],
 		"description": "trim ... PROS"
 	},
@@ -293,12 +346,12 @@
 		"body": [
 			"RPT ${1:string} ${2:number}"
 		],
-		"description": "trim ... PROS"
+		"description": "rpt ... PROS"
 	},
     "subStr": {
 		"prefix": "subStr",
 		"body": [
-			"SUBSTR ${1:string} ${2:begining} ${3:length}"
+			"SUBSTR ${1:string} ${2:start} ${3:length}"
 		],
 		"description": "subStr ... PROS"
 	},
@@ -316,6 +369,20 @@
 		],
 		"description": "findStr ... PROS"
 	},
+    "decimalRound": {
+		"prefix": "decimalRound",
+		"body": [
+			"DecimalRound(${1:decimals}, ${2:value})"
+		],
+		"description": "decimalRound ... PROS"
+	},
+    "sqlQuery": {
+		"prefix": "sqlQuery",
+		"body": [
+			"SQL_QUERY ${1:query} IN \"${2:result}\""
+		],
+		"description": "sqlQuery ... PROS"
+	},
     "comment_selected": {
 		"prefix": "#comment selected text",
 		"body": [
@@ -327,7 +394,7 @@
         "prefix": "#region",
         "body": [
             "/*#region:${1:region}*/",
-            "\n",
+            "$0",
             "/*#endregion*/"
         ],
         "description": "region ... PROS"
@@ -360,7 +427,7 @@
         "body": [
             "confML.getBdtTableName(\"${1:bdtName}\")"
         ],
-        "description": "getExistingObjectByCPE ... PROS"
+        "description": "getBdtTableName ... PROS"
     },
     "getSetting": {
         "prefix": "getSetting",
@@ -400,7 +467,7 @@
     "isObjectLoaded": {
         "prefix": "isObjectLoaded",
         "body": [
-            "confML.isObjectLoaded(${1:java.lang.String} \"${2:CPE}\")"
+            "confML.isObjectLoaded(\"${1:CPE}\")"
         ],
         "description": "isObjectLoaded ... PROS"
     },
@@ -470,7 +537,7 @@
     "setListOutput": {
         "prefix": "setListOutput",
         "body": [
-            "confML.setListOutput(${1:aliasName},${2:value})"
+            "confML.setListOutput(${1:aliasName},${2:values})"
         ],
         "description": "setListOutput ... PROS"
     },
@@ -487,6 +554,37 @@
         ],
         "description": "If ... PROS"
     },
+    "SiSinon": {
+        "prefix": "siSinon",
+        "body": [
+            "SI ${1:condition}",
+            "\t${2}",
+            "SINON",
+            "\t$0",
+            "FIN_SI"
+        ],
+        "description": "If ... Else ... PROS"
+    },
+    "SiSinonSi": {
+        "prefix": "siSinonSi",
+        "body": [
+            "SI ${1:condition}",
+            "\t${2}",
+            "SINON_SI ${3:condition}",
+            "\t${4}",
+            "SINON",
+            "\t$0",
+            "FIN_SI"
+        ],
+        "description": "If ... ElseIf ... Else ... PROS"
+    },
+    "SiLigne": {
+        "prefix": "siLigne",
+        "body": [
+            "SI ${1:condition} ${2:instruction} FIN_SI"
+        ],
+        "description": "If ... End_If on one line ... PROS"
+    },
     "sinon": {
 		"prefix": "sinon",
 		"body": [
@@ -498,7 +596,8 @@
     "SinonSi": {
 		"prefix": "sinonsi",
 		"body": [
-			"SINON_SI "
+			"SINON_SI ${1:condition}",
+			"\t$0"
 		],
 		"description": "ElseIf ... PROS"
 	},
@@ -530,14 +629,14 @@
         "body": [
             "REPETER",
             "\t$0",
-            "JUSQU_A ${1:condition}"
+            "JUSQU_A (${1:condition})"
         ],
-        "description": "While ... PROS"
+        "description": "Repeat ... Until ... PROS"
     },
     "Jusqua": {
 		"prefix": "jusqua",
 		"body": [
-			"JUSQU_A ${1:condition}"
+			"JUSQU_A (${1:condition})"
 		],
 		"description": "Until ... PROS"
 	},
@@ -547,6 +646,22 @@
 			"SORTIE_BOUCLE"
 		],
 		"description": "ExitLoop ... PROS"
+	},
+    "SortieMacro": {
+		"prefix": "sortiemacro",
+		"body": [
+			"SORTIE_MACRO"
+		],
+		"description": "ExitMacro ... PROS"
+	},
+    "Definition": {
+		"prefix": "definition",
+		"body": [
+			"DEFINITION ${1:brc}(${2})",
+			"$0",
+			"FIN_DEFINITION"
+		],
+		"description": "define ... PROS"
 	},
     "vrai": {
 		"prefix": "vrai",
@@ -586,7 +701,7 @@
     "Supprimer": {
 		"prefix": "supprimer",
 		"body": [
-			"SUPPRIMER ${1:nom}"
+			"SUPPRIMER \"${1:nom}\""
 		],
 		"description": "Delete ... PROS"
 	},
@@ -607,7 +722,7 @@
     "Erreur": {
 		"prefix": "erreur",
 		"body": [
-			"ERREUR ${TM_SELECTED_TEXT}"
+			"ERREUR ${1:statut} ${TM_SELECTED_TEXT:${2:message}}"
 		],
 		"description": "Error ... PROS"
 	},
@@ -644,12 +759,12 @@
 		"body": [
 			"MINUSCULE(${TM_SELECTED_TEXT:${1:chaine}})"
 		],
-		"description": "upper ... PROS"
+		"description": "lower ... PROS"
 	},
     "oteblancs": {
 		"prefix": "oteblancs",
 		"body": [
-			"OTEBLANCS ${1:option} ${2:chaine}"
+			"OTEBLANCS ${1:chaine}"
 		],
 		"description": "trim ... PROS"
 	},
@@ -673,6 +788,12 @@
 			"CHERCHER_CHAINE ${1:start(optionel)} ${2:chaine} ${3:a_chercher}"
 		],
 		"description": "findStr ... PROS"
+	},
+    "trouverChaine": {
+		"prefix": "trouverChaine",
+		"body": [
+			"TROUVER_CHAINE ${1:debut(optionnel)} ${2:chaine} ${3:a_chercher}"
+		],
+		"description": "findStr ... PROS"
 	}
-    
 }
