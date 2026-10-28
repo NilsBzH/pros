@@ -9,6 +9,11 @@
 ## STUFF TO CUSTOMIZE - you probably don't want all of these.
 ######################################################################
 
+help/
+docs/
+examples/
+CLAUDE.md
+
 ## node.js
 node_modules
 lib-cov

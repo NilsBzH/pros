@@ -1,9 +1,18 @@
 {
   "name": "pros",
   "displayName": "PROS",
-  "description": "PROS macro language",
+  "description": "PROS CPQ macro language support (Macro-Based BRC): syntax highlighting, snippets, indentation",
   "publisher": "NilsBzH",
   "version": "0.0.1",
+  "license": "GPL-2.0-only",
+  "keywords": [
+    "pros",
+    "cpq",
+    "smart cpq",
+    "macro",
+    "brc",
+    "pros connect"
+  ],
   "engines": {
     "vscode": "^1.69.0"
   },
@@ -38,13 +47,6 @@
         "path": "./syntaxes/pros.tmLanguage.json"
       }
     ],
-    "themes": [
-      {
-        "label": "Pros",
-        "uiTheme": "vs-dark",
-        "path": "./themes/pros-color-theme.json"
-      }
-    ],
     "snippets": [
       {
         "language": "pros",
@@ -56,7 +58,8 @@
     "type": "git",
     "url": "https://github.com/NilsBzH/pros.git"
   },
-  "devDependencies": {
-    "js-yaml": "^4.1.0"
-  }
+  "bugs": {
+    "url": "https://github.com/NilsBzH/pros/issues"
+  },
+  "homepage": "https://github.com/NilsBzH/pros#readme"
 }

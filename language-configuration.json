@@ -1,59 +1,41 @@
 {
     "comments": {
-        // symbols used for start and end a block comment. Remove this entry if your language does not support block comments
+        // the macro language only has block comments (no line comment)
         "blockComment": [ "/*", "*/" ]
     },
-    // symbols used as brackets
     "brackets": [
         ["[", "]"],
         ["(", ")"]
     ],
-    // symbols that are auto closed when typing
     "autoClosingPairs": [
         ["[", "]"],
         ["(", ")"],
-        ["\"", "\""],
-        ["'", "'"],
-        ["\/*", "*\/"]
+        { "open": "\"", "close": "\"", "notIn": ["string", "comment"] },
+        { "open": "'", "close": "'", "notIn": ["string", "comment"] },
+        { "open": "/*", "close": "*/", "notIn": ["string"] }
     ],
-    // symbols that can be used to surround a selection
     "surroundingPairs": [
         ["[", "]"],
         ["(", ")"],
         ["\"", "\""],
         ["'", "'"],
-        ["\/*", "*\/"]
+        ["/*", "*/"]
     ],
     "colorizedBracketPairs": [
-		["(", ")"],
-		["[", "]"]
-	],
+        ["(", ")"],
+        ["[", "]"]
+    ],
     "folding": {
-		"markers": {
-            //"start": "^\\s*//\\s*#?region\\b",
-            //"end": "^\\s*//\\s*#?endregion\\b"
-            "start": "^\\s*/\\*\\s*#?region\\:.*\\*\\s*/",
-            "end": "^\\s*/\\*\\s*#?endregion\\*\\s*/"
-		}
-	},
-    "indentationRules": {
-		"increaseIndentPattern": "^(if|IF|while|WHILE|else_if|ELSE_IF).*[^(end_if|END_IF|end_while|END_WHILE)]$|^(repeat|REPEAT|else|ELSE)$",
-        //"unIndentedLinePattern": pattern pour ligne ne devant pas être indentée
-        //"indentNextLinePattern": pattern pour indenter prochaine ligne
-		"decreaseIndentPattern": "^\\s*(end_if|END_IF|else|ELSE|else_if|ELSE_IF)"
-	},
-	"wordPattern": {
-        "pattern": "(#?-?\\d*\\.\\d\\w*%?)|(::?[\\w-]*(?=[^,{;]*[,{]))|(([@#.!])?[\\w-?]+%?|[@#!.])",
+        "markers": {
+            "start": "^\\s*/\\*\\s*#?region\\b",
+            "end": "^\\s*/\\*\\s*#?endregion\\b"
+        }
     },
-    /*"onEnterRules": [
-		// Indent when pressing enter from inside ()
-		{
-			"beforeText": "^.*\\([^\\)]*$",
-			"afterText": "^\\s*\\).*$",
-			"action": {
-				"indent": "indentOutdent",
-				"appendText": "\t",
-			}
-		}
-    ]*/
+    "indentationRules": {
+        // keywords are written either all upper case or all lower case; a block closed on the same line (IF ... END_IF) does not indent
+        // the macro body stays at the same level as DEFINE, so DEFINE ... END_DEFINE is not listed here
+        "increaseIndentPattern": "^\\s*(?:IF|if|SI|si|ELSE_IF|else_if|SINON_SI|sinon_si|ELSE|else|SINON|sinon|WHILE|while|TANT_QUE|tant_que|REPEAT|repeat|REPETER|repeter)\\b(?!.*\\b(?:END_IF|end_if|FIN_SI|fin_si|END_WHILE|end_while|FIN_TANT_QUE|fin_tant_que|UNTIL|until|JUSQU_A|jusqu_a)\\b).*$",
+        "decreaseIndentPattern": "^\\s*(?:END_IF|end_if|FIN_SI|fin_si|ELSE_IF|else_if|SINON_SI|sinon_si|ELSE|else|SINON|sinon|END_WHILE|end_while|FIN_TANT_QUE|fin_tant_que|UNTIL|until|JUSQU_A|jusqu_a)\\b"
+    },
+    "wordPattern": "\\d+(?:\\.\\d+)?|[A-Za-z_\\u00C0-\\u00FF][A-Za-z0-9_\\u00C0-\\u00FF]*"
 }
