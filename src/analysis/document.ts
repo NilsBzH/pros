@@ -65,7 +65,7 @@ const EXIT_MACRO = new Set(['EXIT_MACRO', 'SORTIE_MACRO']);
 const DECLARATIONS = new Set(['LET', 'SOIT', 'LOCAL']);
 const EXPECTED_CLOSER: Record<BlockKind, string> = { define: 'END_DEFINE', if: 'END_IF', while: 'END_WHILE', repeat: 'UNTIL' };
 const OPENER_NAME: Record<BlockKind, string> = { define: 'DEFINE', if: 'IF', while: 'WHILE', repeat: 'REPEAT' };
-/** Spellings confirmed as invalid by the user (Q-14, Q-09). */
+/** Spellings known to be invalid, with the form to use instead. */
 const INVALID_FORMS: Record<string, string> = { TRACE_END: 'TRACE_OFF' };
 
 interface Frame {
@@ -114,7 +114,7 @@ export function analyze(text: string): Analysis {
   for (let i = 0; i < code.length; i++) {
     const token = code[i];
 
-    // "//" is not a comment (Q-03)
+    // "//" is not a comment: the language only has /* ... */ comments
     if (token.kind === 'operator' && token.text === '/' && code[i + 1]?.text === '/' && code[i + 1].start === token.end) {
       issues.push({ start: token.start, end: code[i + 1].end, severity: 'warning', code: 'line-comment',
         message: "« // » n'est pas un commentaire en langage macro : utiliser /* … */." });
@@ -128,7 +128,7 @@ export function analyze(text: string): Analysis {
     const word = token.text;
     const form = keywordForm(word);
 
-    // Mixed case keyword (Display, End_If…): not recognised by the language (Q-02)
+    // Mixed case keyword (Display, End_If…): keywords are written all upper or all lower case
     const mixed = mixedCaseMatch(word);
     if (mixed) {
       report(token, 'warning', 'mixed-case',
@@ -141,7 +141,7 @@ export function analyze(text: string): Analysis {
       continue;
     }
 
-    // "BRC name()" is not a valid header (Q-09)
+    // "BRC name()" is not a valid header: macros start with DEFINE
     if (form === 'BRC' && code[i + 1]?.kind === 'word' && code[i + 2]?.text === '(' && (i === 0 || code[i - 1].line < token.line)) {
       report(token, 'error', 'brc-header', "« BRC nom() » n'est pas un en-tête valide : utiliser DEFINE nom().");
       continue;

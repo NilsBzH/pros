@@ -1,5 +1,5 @@
 // Access to the language reference (functions.json): lookup by spelling, methods by receiver.
-// Spelling rule (Q-02): an upper case name also accepts its lower case form; any other name is exact.
+// Spelling rule: keywords are written all upper or all lower case, so an upper case name also accepts its lower case form; any other name is exact.
 import data from './functions.json';
 
 export type EntryKind =

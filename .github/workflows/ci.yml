@@ -16,8 +16,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
-      - run: npx @vscode/vsce package --out pros.vsix
+      - run: npx @vscode/vsce package --out pros-macro-language.vsix
       - uses: actions/upload-artifact@v4
         with:
-          name: pros-vsix
-          path: pros.vsix
+          name: pros-macro-language-vsix
+          path: pros-macro-language.vsix

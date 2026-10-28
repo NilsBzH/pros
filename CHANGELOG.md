@@ -1,11 +1,11 @@
 # Changelog
 
-All notable changes to the "pros" extension are documented in this file.
+All notable changes to the "pros-macro-language" extension are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [0.1.0] - 2026-10-28
 
-First public release. Unofficial extension, not affiliated with PROS.
+First public release. Unofficial extension, not affiliated with PROS or Conga.
 
 ### Added
 
@@ -26,7 +26,7 @@ First public release. Unofficial extension, not affiliated with PROS.
   - mixed case keywords;
   - `//` used as a comment;
   - commands that no longer work on the platform.
-- Language reference database (`src/data/functions.json`), built from the CPQ 12 macro language manual and the "Macro-Based BRC" guide.
+- Language reference database, built from the CPQ 12 macro language manual and the "Macro-Based BRC" guide.
 - Grammar tests (`vscode-tmgrammar-test`) and unit tests (`node:test`), run by `npm test` and by the GitHub Actions workflow.
 - Extension icon.
 

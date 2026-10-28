@@ -89,11 +89,14 @@ export function entryMarkdown(entry: Entry): vscode.MarkdownString {
     md.appendMarkdown(`**Synonymes** : ${others.map(s => `\`${s}\``).join(', ')}\n\n`);
   }
   if (entry.status === 'undocumented') {
-    md.appendMarkdown('_Absent des PDF, confirmé par l\'usage._\n\n');
+    md.appendMarkdown('_Non documenté dans le manuel._\n\n');
   } else if (entry.status === 'legacy') {
-    md.appendMarkdown('_Mot conservé de la grammaire d\'origine._\n\n');
+    md.appendMarkdown('_Mot-clé reconnu pour compatibilité, non documenté dans le manuel._\n\n');
   }
-  md.appendMarkdown(`_Réf. : ${readableSource(entry.source)}_`);
+  // Undocumented entries have no page to point to; their status line above already says so.
+  if (/\bp\./.test(entry.source)) {
+    md.appendMarkdown(`_Réf. : ${readableSource(entry.source)}_`);
+  }
   return md;
 }
 

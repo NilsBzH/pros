@@ -87,7 +87,7 @@
       }
     },
     "array-keys": {
-      "comment": "special array keys \"NR\", \"NF\", \"NC\", \"OP\" used as an index (reference § 7)",
+      "comment": "special array keys \"NR\", \"NF\", \"NC\", \"OP\" used as an index",
       "match": "(?<=[\\[,])\\s*(([\"'])(?:NR|NF|NC|OP)\\2)(?=\\s*[\\],])",
       "captures": {
         "1": {
@@ -96,7 +96,7 @@
       }
     },
     "strings": {
-      "comment": "quotes are escaped by doubling them; backslash is a literal character (reference § 2.3)",
+      "comment": "quotes are escaped by doubling them; backslash is a literal character",
       "patterns": [
         {
           "name": "string.quoted.double.pros",
@@ -192,7 +192,7 @@
       }
     },
     "confml": {
-      "comment": "confML configuration object (reference § 5.17)",
+      "comment": "confML configuration object and its methods",
       "match": "\\b(confML)\\b(?:\\s*(\\.)\\s*(clearBusinessExplanations|getDefaultPricingMethods|raiseBusinessExplanation|getExistingObjectByCPE|saveConfiguration|getPricesOfItems|getBdtTableName|setSimpleOutput|getObjectByCPE|getSimpleInput|isObjectLoaded|isDomainValue|raiseSetValue|setListOutput|getListInput|getSettings|raiseAction|setSettings|getSetting|setSetting)\\b)?",
       "captures": {
         "1": {
@@ -207,7 +207,7 @@
       }
     },
     "java-classes": {
-      "comment": "short closed list of Java classes seen in the manual or in real files",
+      "comment": "short closed list of common Java classes",
       "match": "\\b(?:LinkedHashMap|MLRestClient|ObjectMapper|Integer|Double|String|Long)\\b(?=\\s*[(.])",
       "name": "support.class.java.pros"
     },
@@ -216,7 +216,7 @@
       "name": "support.class.pros"
     },
     "environments": {
-      "comment": "environment addressing (reference § 4.3); racine is also a SQRT synonym, so it is an environment only before a dot",
+      "comment": "environment addressing; racine is also a SQRT synonym, so it is an environment only before a dot",
       "patterns": [
         {
           "match": "\\b(?:root|current|super)\\b",
@@ -249,7 +249,7 @@
       "name": "keyword.other.pros"
     },
     "legacy-keywords": {
-      "comment": "words of the original grammar not found in the documentation, kept on user request",
+      "comment": "additional keywords kept for compatibility, not found in the documentation",
       "match": "\\b(?:sql_connect|SQL_CONNECT|lire_table|LIRE_TABLE|read_table|READ_TABLE|arrondi|ARRONDI|memoire|MEMOIRE|ou_excl|OU_EXCL|systeme|SYSTEME|memory|MEMORY|force|FORCE|beep|BEEP|exor|EXOR|mod|MOD)\\b",
       "name": "keyword.other.pros"
     },
@@ -258,7 +258,7 @@
       "name": "constant.language.pros"
     },
     "numbers": {
-      "comment": "integers and decimals with a dot only (Q-05)",
+      "comment": "integers and decimals with a dot only",
       "match": "\\b\\d+(?:\\.\\d+)?\\b",
       "name": "constant.numeric.pros"
     },

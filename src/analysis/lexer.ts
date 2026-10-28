@@ -1,4 +1,4 @@
-// Tokenizer for the PROS macro language (reference § 2).
+// Tokenizer for the PROS macro language.
 // Strings use ' or " and escape the delimiter by doubling it; backslash is a plain character.
 // Comments are /* ... */ only; strings and comments may span several lines.
 

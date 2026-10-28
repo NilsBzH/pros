@@ -14,7 +14,7 @@ export interface CompletionSpec {
   entry?: Entry;
 }
 
-/** Lower case when the typed prefix is all lower case, upper case otherwise (never mixed case, Q-02). */
+/** Lower case when the typed prefix is all lower case, upper case otherwise (keywords are never written in mixed case). */
 export function caseModeFor(prefix: string): CaseMode {
   return prefix !== '' && prefix === prefix.toLowerCase() && prefix !== prefix.toUpperCase() ? 'lower' : 'upper';
 }
@@ -29,7 +29,7 @@ const escape = (text: string) => text.replace(/[$}\\]/g, '\\$&');
 
 type Keyword = (word: string) => string;
 
-/** Whole blocks inserted by the block keywords (reference § 3.1); the macro body stays at the DEFINE level. */
+/** Whole blocks inserted by the block keywords; the macro body stays at the DEFINE level. */
 const BLOCKS: Record<string, (k: Keyword) => string> = {
   DEFINE: k => `${k('DEFINE')} \${1:nom}(\${2})\n$0\n${k('END_DEFINE')}`,
   DEFINITION: k => `${k('DEFINITION')} \${1:nom}(\${2})\n$0\n${k('FIN_DEFINITION')}`,

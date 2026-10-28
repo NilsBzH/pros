@@ -1,6 +1,6 @@
 {
-  "name": "pros",
-  "displayName": "PROS Macro Language (unofficial)",
+  "name": "pros-macro-language",
+  "displayName": "PROS CPQ Macro Language (unofficial)",
   "description": "Unofficial support for the PROS Smart CPQ macro language (Macro-Based BRC): syntax highlighting, completion, hover, signature help, outline and diagnostics.",
   "publisher": "nilsbzh",
   "version": "0.1.0",
@@ -15,7 +15,8 @@
     "macro language",
     "brc",
     "business rules",
-    "pros connect"
+    "pros connect",
+    "conga"
   ],
   "engines": {
     "vscode": "^1.69.0"
