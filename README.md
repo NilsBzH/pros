@@ -11,13 +11,16 @@ Extension Visual Studio Code pour le **langage macro de PROS Smart CPQ**, utilis
   - l'objet `confML` et ses méthodes ;
   - les appels de méthodes Java (`obj.put(…)`) et les classes Java courantes (`Integer`, `LinkedHashMap`…) ;
   - les chaînes, avec échappement par doublement (`""`, `''`), et les commentaires `/* … */`.
-- Snippets pour les structures de contrôle (`IF`, `WHILE`, `REPEAT`, `DEFINE`…), les commandes courantes et les méthodes de l'objet `confML`. Les formes anglaises et françaises sont disponibles.
 - Indentation automatique des blocs : `IF … ELSE_IF … ELSE … END_IF`, `WHILE … END_WHILE`, `REPEAT … UNTIL`, ainsi que leurs formes françaises. Le corps d'une macro reste au niveau de `DEFINE`. Un bloc ouvert et fermé sur la même ligne (`IF x LET y 1 END_IF`) ne décale pas l'indentation.
 - Repli des régions délimitées par `/*#region:nom*/` et `/*#endregion*/`.
-- Complétion :
-  - mots-clés, commandes et fonctions de la référence, avec leurs synonymes français ;
-  - méthodes de `confML` après `confML.` ;
-  - macros et variables du fichier.
+- Complétion (elle remplace les anciens snippets) :
+  - **Blocs** : `DEFINE`, `IF`, `ELSE_IF`, `ELSE`, `WHILE`, `REPEAT` et leurs formes françaises (`DEFINITION`, `SI`, `SINON_SI`, `SINON`, `TANT_QUE`, `REPETER`) insèrent le bloc complet, fermeture comprise. La touche Tab passe d'un champ à l'autre.
+  - **Variantes** : `IF … ELSE`, `IF … ELSE_IF … ELSE`, `SI … SINON` et `SI … SINON_SI … SINON` insèrent un bloc avec ses branches.
+  - **Casse** : les mots-clés sont insérés dans la casse que vous avez commencé à taper, en minuscules si vous tapez en minuscules et en majuscules sinon, jamais en casse mixte.
+  - **Fonctions et commandes** : l'appel est inséré avec un champ par paramètre, selon la syntaxe documentée. Par exemple `Lpad(string, lengthString, append)` ou `SQL_QUERY requête IN "tableau"`. Les paramètres facultatifs n'ont pas de champ.
+  - Méthodes de `confML` après `confML.`, avec un champ par paramètre.
+  - Macros (avec leurs paramètres) et variables du fichier.
+  - `#region` : insère une paire `/*#region:nom*/` … `/*#endregion*/`.
 - Survol : syntaxe, paramètres, valeur de retour et page du manuel pour chaque élément du langage ; ligne de définition pour les macros et les variables du fichier.
 - Aide à la signature pour les appels avec parenthèses : fonctions, méthodes de `confML`, constructeurs et macros du fichier.
 - Plan du document (macros, leurs variables, régions) et « Atteindre la définition » pour les macros, y compris dans les autres fichiers `.pros` de l'espace de travail, et pour les variables.
