@@ -14,7 +14,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Folding of blocks (`DEFINE`, `IF` and each of its branches, `WHILE`, `REPEAT`) and of multi-line comments, in addition to regions.
 - Document and selection formatting: re-indentation of the blocks and removal of trailing spaces.
 - Quick fixes for mixed case keywords, `//` comments, `trace_end` and `BRC name()` headers.
-- Parameter name hints in calls without parentheses, with the `pros.inlayHints.parameterNames` setting (`none`, `literals`, `all`).
 
 ### Changed
 

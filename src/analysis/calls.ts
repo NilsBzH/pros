@@ -384,35 +384,6 @@ export function spaceActivity(signature: ParsedSignature, call: SpaceCall): Acti
   return { param: parts[call.cursor]?.param ?? -1, fits };
 }
 
-export interface SpaceArguments {
-  name: Token;
-  entry: Entry;
-  items: Token[][];
-}
-
-/** Every call without parentheses of the code, with the arguments written on its line. */
-export function spaceCalls(code: Token[]): SpaceArguments[] {
-  const calls: SpaceArguments[] = [];
-  for (let i = 0; i < code.length; i++) {
-    const token = code[i];
-    const entry = token.kind === 'word' && code[i - 1]?.text !== '.' ? lookup(token.text) : undefined;
-    // STR(x) is the same function written with parentheses.
-    if (!entry || entry.style !== 'space' || entry.status === 'excluded' || !['function', 'command'].includes(entry.kind)
-      || (code[i + 1]?.text === '(' && code[i + 1].start === token.end)) {
-      continue;
-    }
-    let end = i + 1;
-    while (end < code.length && code[end].line === token.line) {
-      end++;
-    }
-    const { items } = readArguments(code, i, end, entry);
-    if (items.length > 0) {
-      calls.push({ name: token, entry, items });
-    }
-  }
-  return calls;
-}
-
 /** Active parameter of a call with parentheses: one parameter per comma. */
 export function parenActivity(signature: ParsedSignature, call: ParenCall): Activity {
   const params = signature.parts.filter(p => p.kind === 'param').length;

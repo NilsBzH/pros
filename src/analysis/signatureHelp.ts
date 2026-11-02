@@ -61,7 +61,12 @@ function macroSignature(macro: MacroInfo): SignatureModel {
   return { label, documentation: macroDocumentation(macro, false), parameters };
 }
 
+/** Signature help at the offset; it stays open while a string argument is typed, but not inside a comment. */
 export function signatureHelpAt(analysis: Analysis, offset: number, line: number): SignatureHelpModel | undefined {
+  const inside = analysis.tokens.find(t => t.start < offset && (offset < t.end || t.closed === false));
+  if (inside?.kind === 'comment') {
+    return undefined;
+  }
   const call = findCall(analysis.code, offset, line);
   if (!call) {
     return undefined;

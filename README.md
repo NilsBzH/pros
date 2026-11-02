@@ -29,7 +29,6 @@ Visual Studio Code extension for the **PROS Smart CPQ macro language**, used in 
   - `#region`: inserts a `/*#region:name*/` … `/*#endregion*/` pair.
 - Hover: syntax, description, parameters and return value for every element of the language; documentation comment and definition line for the macros of the file (see [Documenting macros](#documenting-macros)); declaration of the variables.
 - Signature help that follows the argument being typed, with or without parentheses: `Lpad(string, length, padding)` as well as `SUBSTR string start length`. The current parameter is highlighted and explained, optional parameters are shown between brackets. It works for functions, commands, `confML` and object methods, constructors and macros of the file.
-- Parameter name hints in calls without parentheses: `SUBSTR s start: 2 length: 3`. See [Settings](#settings).
 - Document outline (macros, their variables, regions) and "Go to Definition" for macros, including in the other `.pros` files of the workspace, and for variables.
 - **Find All References** and **Rename Symbol** (F2):
   - parameters and variables, within the macro that declares them;
@@ -63,11 +62,7 @@ END_DEFINE
 
 ## Settings
 
-| Setting | Default | Description |
-|---|---|---|
-| `pros.inlayHints.parameterNames` | `literals` | Parameter name hints in calls without parentheses: `none`, `literals` (before numbers and strings only) or `all` (before every argument). |
-
-Semantic highlighting is turned on for `.pros` files (`editor.semanticHighlighting.enabled`). Inlay hints can also be turned off for every language with `editor.inlayHints.enabled`.
+Semantic highlighting is turned on for `.pros` files (`editor.semanticHighlighting.enabled`).
 
 ## Installation
 

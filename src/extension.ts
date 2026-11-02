@@ -5,7 +5,6 @@ import { ProsCompletionProvider } from './providers/completion';
 import { registerDiagnostics } from './providers/diagnostics';
 import { ProsFoldingRangeProvider, ProsFormattingProvider } from './providers/formatting';
 import { ProsHoverProvider } from './providers/hover';
-import { ProsInlayHintsProvider } from './providers/inlayHints';
 import { ProsReferenceProvider, ProsRenameProvider } from './providers/references';
 import { ProsSemanticTokensProvider, legend } from './providers/semanticTokens';
 import { ProsSignatureHelpProvider } from './providers/signature';
@@ -15,11 +14,11 @@ const selector: vscode.DocumentSelector = { language: 'pros' };
 
 export function activate(context: vscode.ExtensionContext): void {
   const formatter = new ProsFormattingProvider();
-  const hints = new ProsInlayHintsProvider();
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider(selector, new ProsCompletionProvider(), '.'),
     vscode.languages.registerHoverProvider(selector, new ProsHoverProvider()),
-    vscode.languages.registerSignatureHelpProvider(selector, new ProsSignatureHelpProvider(), '(', ','),
+    // The space opens the signature help of calls without parentheses (SUBSTR s 1 2) typed by hand.
+    vscode.languages.registerSignatureHelpProvider(selector, new ProsSignatureHelpProvider(), { triggerCharacters: ['(', ',', ' '], retriggerCharacters: [] }),
     vscode.languages.registerDocumentSymbolProvider(selector, new ProsDocumentSymbolProvider()),
     vscode.languages.registerDefinitionProvider(selector, new ProsDefinitionProvider()),
     vscode.languages.registerDocumentSemanticTokensProvider(selector, new ProsSemanticTokensProvider(), legend),
@@ -29,8 +28,6 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.languages.registerDocumentFormattingEditProvider(selector, formatter),
     vscode.languages.registerDocumentRangeFormattingEditProvider(selector, formatter),
     vscode.languages.registerCodeActionsProvider(selector, new ProsCodeActionProvider(), { providedCodeActionKinds: ProsCodeActionProvider.kinds }),
-    vscode.languages.registerInlayHintsProvider(selector, hints),
-    hints.watchSetting(),
   );
   registerDiagnostics(context);
 }

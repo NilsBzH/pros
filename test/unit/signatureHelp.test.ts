@@ -70,6 +70,14 @@ test('no signature help once a call is complete or outside a call', () => {
   assert.equal(helpAt('IF a = 1 |'), undefined);
 });
 
+test('the signature help stays open while a string argument is typed, not in a comment', () => {
+  assert.deepEqual(helpAt('replace_str "sdsd" "d|f"'), { label: 'REPLACE_STR string search replacement', param: 'search' });
+  assert.deepEqual(helpAt('LET x SUBSTR "ab|'), { label: 'SUBSTR string start length', param: 'string' });
+  assert.deepEqual(helpAt('LET x Lpad("a, b|", 5'), { label: 'Lpad(string, length, padding)', param: 'string' });
+  assert.equal(helpAt('LET x SUBSTR /* s |'), undefined);
+  assert.equal(helpAt('LET x Lpad(/* a, | */'), undefined);
+});
+
 test('calls with parentheses: functions, methods, overloads, macros', () => {
   assert.deepEqual(helpAt('LET x Lpad("a", |'), { label: 'Lpad(string, length, padding)', param: 'length' });
   assert.deepEqual(helpAt('IF IsDefined(|'), { label: 'IsDefined(expr)', param: 'expr' });

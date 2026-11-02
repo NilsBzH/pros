@@ -2,16 +2,12 @@
 // (SUBSTR s start length): the label shows every parameter, the current one is highlighted and documented.
 import * as vscode from 'vscode';
 import { signatureHelpAt } from '../analysis/signatureHelp';
-import { getAnalysis, inStringOrComment } from './shared';
+import { getAnalysis } from './shared';
 
 export class ProsSignatureHelpProvider implements vscode.SignatureHelpProvider {
   provideSignatureHelp(document: vscode.TextDocument, position: vscode.Position): vscode.SignatureHelp | undefined {
     const analysis = getAnalysis(document);
-    const offset = document.offsetAt(position);
-    if (inStringOrComment(analysis, offset)) {
-      return undefined;
-    }
-    const model = signatureHelpAt(analysis, offset, position.line);
+    const model = signatureHelpAt(analysis, document.offsetAt(position), position.line);
     if (!model) {
       return undefined;
     }
