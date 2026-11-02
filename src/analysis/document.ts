@@ -46,28 +46,38 @@ export interface RegionInfo {
   end?: Token;
 }
 
+export type BlockKind = 'define' | 'if' | 'while' | 'repeat';
+
+export interface BlockInfo {
+  kind: BlockKind;
+  open: Token;
+  /** ELSE_IF and ELSE of an IF block. */
+  branches: Token[];
+  /** Undefined when the block is not closed. */
+  close?: Token;
+}
+
 export interface Analysis {
   tokens: Token[];
   code: Token[];
   macros: MacroInfo[];
   variables: VariableInfo[];
   regions: RegionInfo[];
+  blocks: BlockInfo[];
   issues: Issue[];
 }
 
-type BlockKind = 'define' | 'if' | 'while' | 'repeat';
-
-const OPENERS: Record<string, BlockKind> = {
+export const OPENERS: Record<string, BlockKind> = {
   DEFINE: 'define', DEFINITION: 'define', IF: 'if', SI: 'if',
   WHILE: 'while', TANT_QUE: 'while', REPEAT: 'repeat', REPETER: 'repeat',
 };
-const CLOSERS: Record<string, BlockKind> = {
+export const CLOSERS: Record<string, BlockKind> = {
   END_DEFINE: 'define', END_DEFINITION: 'define', FIN_DEFINITION: 'define',
   END_IF: 'if', FIN_SI: 'if', END_WHILE: 'while', FIN_TANT_QUE: 'while',
   UNTIL: 'repeat', JUSQU_A: 'repeat',
 };
-const ELSE_IF = new Set(['ELSE_IF', 'SINON_SI']);
-const ELSE = new Set(['ELSE', 'SINON']);
+export const ELSE_IF = new Set(['ELSE_IF', 'SINON_SI']);
+export const ELSE = new Set(['ELSE', 'SINON']);
 const EXIT_LOOP = new Set(['EXIT_LOOP', 'SORTIE_BOUCLE']);
 const EXIT_MACRO = new Set(['EXIT_MACRO', 'SORTIE_MACRO']);
 const DECLARATIONS = new Set(['LET', 'SOIT', 'LOCAL']);
@@ -81,10 +91,11 @@ interface Frame {
   token: Token;
   hasElse: boolean;
   macro?: MacroInfo;
+  block: BlockInfo;
 }
 
 /** A word token that is not a member name (obj.word). */
-function isFreeWord(code: Token[], index: number): boolean {
+export function isFreeWord(code: Token[], index: number): boolean {
   const token = code[index];
   const previous = code[index - 1];
   return token.kind === 'word' && !(previous && previous.kind === 'punct' && previous.text === '.');
@@ -96,7 +107,13 @@ export function analyze(text: string): Analysis {
   const issues: Issue[] = [];
   const macros: MacroInfo[] = [];
   const variables: VariableInfo[] = [];
+  const blocks: BlockInfo[] = [];
   const stack: Frame[] = [];
+  const open = (kind: BlockKind, token: Token, macro?: MacroInfo) => {
+    const block: BlockInfo = { kind, open: token, branches: [] };
+    blocks.push(block);
+    stack.push({ kind, token, hasElse: false, macro, block });
+  };
 
   const report = (token: Token, severity: Severity, code: string, message: string) =>
     issues.push({ start: token.start, end: token.end, severity, message, code });
@@ -189,9 +206,9 @@ export function analyze(text: string): Analysis {
         if (macro) {
           macros.push(macro);
         }
-        stack.push({ kind: 'define', token, hasElse: false, macro });
+        open('define', token, macro);
       } else {
-        stack.push({ kind: opener, token, hasElse: false });
+        open(opener, token);
       }
       continue;
     }
@@ -209,6 +226,7 @@ export function analyze(text: string): Analysis {
         closeMacro(frame, token.start);
       }
       const frame = stack.pop()!;
+      frame.block.close = token;
       closeMacro(frame, token.end, token);
       continue;
     }
@@ -219,8 +237,9 @@ export function analyze(text: string): Analysis {
         report(token, 'error', 'misplaced-else', `${word} outside an IF block.`);
       } else if (top.hasElse) {
         report(token, 'error', 'misplaced-else', `${word} after ELSE in the same IF block.`);
-      } else if (ELSE.has(form)) {
-        top.hasElse = true;
+      } else {
+        top.block.branches.push(token);
+        top.hasElse = ELSE.has(form);
       }
       continue;
     }
@@ -243,7 +262,7 @@ export function analyze(text: string): Analysis {
   for (const macro of macros) {
     macro.doc = macroDoc(tokens, macro);
   }
-  return { tokens, code, macros, variables, regions: findRegions(tokens), issues };
+  return { tokens, code, macros, variables, regions: findRegions(tokens), blocks, issues };
 }
 
 /** DEFINE name ( p1 , p2 ) starting at code[index]. */
@@ -298,8 +317,8 @@ export function parseDoc(comment: string): MacroDoc | undefined {
   return text || Object.keys(params).length > 0 ? { description: text, params } : undefined;
 }
 
-const REGION_START = /^\/\*\s*#?region\b[:\s]*([\s\S]*?)\s*\*\/$/;
-const REGION_END = /^\/\*\s*#?endregion\b/;
+export const REGION_START = /^\/\*\s*#?region\b[:\s]*([\s\S]*?)\s*\*\/$/;
+export const REGION_END = /^\/\*\s*#?endregion\b/;
 
 function findRegions(tokens: Token[]): RegionInfo[] {
   const regions: RegionInfo[] = [];

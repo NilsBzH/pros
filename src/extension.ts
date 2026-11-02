@@ -2,6 +2,7 @@
 import * as vscode from 'vscode';
 import { ProsCompletionProvider } from './providers/completion';
 import { registerDiagnostics } from './providers/diagnostics';
+import { ProsFoldingRangeProvider, ProsFormattingProvider } from './providers/formatting';
 import { ProsHoverProvider } from './providers/hover';
 import { ProsReferenceProvider, ProsRenameProvider } from './providers/references';
 import { ProsSemanticTokensProvider, legend } from './providers/semanticTokens';
@@ -20,6 +21,9 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.languages.registerDocumentSemanticTokensProvider(selector, new ProsSemanticTokensProvider(), legend),
     vscode.languages.registerReferenceProvider(selector, new ProsReferenceProvider()),
     vscode.languages.registerRenameProvider(selector, new ProsRenameProvider()),
+    vscode.languages.registerFoldingRangeProvider(selector, new ProsFoldingRangeProvider()),
+    vscode.languages.registerDocumentFormattingEditProvider(selector, new ProsFormattingProvider()),
+    vscode.languages.registerDocumentRangeFormattingEditProvider(selector, new ProsFormattingProvider()),
   );
   registerDiagnostics(context);
 }
