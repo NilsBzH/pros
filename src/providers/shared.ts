@@ -2,6 +2,7 @@
 import * as vscode from 'vscode';
 import { analyze, Analysis, MacroInfo } from '../analysis/document';
 import { Token, tokenAt } from '../analysis/lexer';
+import { macroDocumentation } from '../analysis/signatureHelp';
 import { Entry, Param } from '../data/reference';
 
 const cache = new Map<string, { version: number; analysis: Analysis }>();
@@ -83,4 +84,9 @@ export function entryMarkdown(entry: Entry): vscode.MarkdownString {
 
 export function macroLabel(macro: MacroInfo): string {
   return `${macro.name}(${macro.params.map(p => p.text).join(', ')})`;
+}
+
+/** Hover and completion text of a macro: header, documentation comment and parameters. */
+export function macroMarkdown(macro: MacroInfo): vscode.MarkdownString {
+  return new vscode.MarkdownString().appendCodeblock(`DEFINE ${macroLabel(macro)}`, 'pros').appendMarkdown(macroDocumentation(macro, true));
 }

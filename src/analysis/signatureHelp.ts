@@ -35,16 +35,30 @@ function entrySignature(signature: ParsedSignature, entry: Entry): SignatureMode
   return { label: signature.label, documentation: `${entry.description}${returns}`, parameters };
 }
 
+/** Markdown documentation of a macro: its documentation comment, the parameter descriptions and where it is defined. */
+export function macroDocumentation(macro: MacroInfo, withParams: boolean): string {
+  const parts: string[] = [];
+  if (macro.doc?.description) {
+    parts.push(macro.doc.description);
+  }
+  const documented = macro.params.filter(p => macro.doc?.params[p.text]);
+  if (withParams && documented.length > 0) {
+    parts.push(documented.map(p => `- \`${p.text}\`: ${macro.doc!.params[p.text]}`).join('\n'));
+  }
+  parts.push(`Macro defined on line ${macro.start.line + 1}.`);
+  return parts.join('\n\n');
+}
+
 function macroSignature(macro: MacroInfo): SignatureModel {
   let label = `${macro.name}(`;
   const parameters: ParameterModel[] = macro.params.map((p, i) => {
     label += i > 0 ? ', ' : '';
     const start = label.length;
     label += p.text;
-    return { start, end: label.length, documentation: '' };
+    return { start, end: label.length, documentation: macro.doc?.params[p.text] ?? '' };
   });
   label += ')';
-  return { label, documentation: `Macro defined on line ${macro.start.line + 1}.`, parameters };
+  return { label, documentation: macroDocumentation(macro, false), parameters };
 }
 
 export function signatureHelpAt(analysis: Analysis, offset: number, line: number): SignatureHelpModel | undefined {

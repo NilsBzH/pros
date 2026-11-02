@@ -22,6 +22,14 @@ export interface MacroInfo {
   endToken?: Token;
   /** Offset after the macro (closing token end, or where the analysis stopped). */
   end: number;
+  /** Comment written right above DEFINE. */
+  doc?: MacroDoc;
+}
+
+export interface MacroDoc {
+  description: string;
+  /** Descriptions given by "@param name description" lines. */
+  params: Record<string, string>;
 }
 
 export interface VariableInfo {
@@ -232,6 +240,9 @@ export function analyze(text: string): Analysis {
     closeMacro(frame, text.length);
   }
 
+  for (const macro of macros) {
+    macro.doc = macroDoc(tokens, macro);
+  }
   return { tokens, code, macros, variables, regions: findRegions(tokens), issues };
 }
 
@@ -250,6 +261,41 @@ function parseMacroHeader(code: Token[], index: number): MacroInfo | undefined {
     }
   }
   return { name: nameToken.text, nameToken, params, start: code[index], end: nameToken.end };
+}
+
+/** Comment ending on the line above DEFINE (or on the same line), region markers excepted. */
+function macroDoc(tokens: Token[], macro: MacroInfo): MacroDoc | undefined {
+  const comment = tokens[tokens.indexOf(macro.start) - 1];
+  if (!comment || comment.kind !== 'comment' || comment.closed === false || REGION_START.test(comment.text) || REGION_END.test(comment.text)) {
+    return undefined;
+  }
+  const endLine = comment.line + comment.text.split('\n').length - 1;
+  return endLine >= macro.start.line - 1 ? parseDoc(comment.text) : undefined;
+}
+
+const PARAM_TAG = /^@param\s+([A-Za-z_À-ÿ][A-Za-z0-9_À-ÿ]*)\s*(.*)$/;
+
+/** Description and "@param name description" lines of a documentation comment; leading "*" are ignored. */
+export function parseDoc(comment: string): MacroDoc | undefined {
+  const lines = comment.slice(2, -2).split('\n').map(l => l.replace(/^\s*\*?[ \t]?/, '').trimEnd());
+  const description: string[] = [];
+  const params: Record<string, string> = {};
+  let param: string | undefined;
+  for (const line of lines) {
+    const tag = PARAM_TAG.exec(line.trim());
+    if (tag) {
+      param = tag[1];
+      params[param] = tag[2];
+    } else if (param && line.trim() !== '') {
+      // Non empty lines after @param continue its description.
+      params[param] = `${params[param]} ${line.trim()}`.trim();
+    } else {
+      param = undefined;
+      description.push(line);
+    }
+  }
+  const text = description.join('\n').trim();
+  return text || Object.keys(params).length > 0 ? { description: text, params } : undefined;
 }
 
 const REGION_START = /^\/\*\s*#?region\b[:\s]*([\s\S]*?)\s*\*\/$/;

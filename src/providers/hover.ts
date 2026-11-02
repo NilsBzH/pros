@@ -1,7 +1,7 @@
 // Hover: reference entries (keywords, functions, confML and object methods), macros and variables of the document.
 import * as vscode from 'vscode';
 import { lookup, lookupMethods } from '../data/reference';
-import { entryMarkdown, getAnalysis, inStringOrComment, macroAt, macroLabel, tokenRange, wordAt } from './shared';
+import { entryMarkdown, getAnalysis, inStringOrComment, macroAt, macroMarkdown, tokenRange, wordAt } from './shared';
 
 export class ProsHoverProvider implements vscode.HoverProvider {
   provideHover(document: vscode.TextDocument, position: vscode.Position): vscode.Hover | undefined {
@@ -38,9 +38,7 @@ export class ProsHoverProvider implements vscode.HoverProvider {
 
     const macro = analysis.macros.find(m => m.name === target.word);
     if (macro) {
-      const md = new vscode.MarkdownString().appendCodeblock(`DEFINE ${macroLabel(macro)}`, 'pros');
-      md.appendMarkdown(`Macro defined on line ${macro.start.line + 1}.`);
-      return new vscode.Hover(md, range);
+      return new vscode.Hover(macroMarkdown(macro), range);
     }
 
     const scope = macroAt(analysis, offset);

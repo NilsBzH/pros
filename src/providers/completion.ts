@@ -4,7 +4,7 @@
 import * as vscode from 'vscode';
 import { EntryKind } from '../data/reference';
 import { CompletionSpec, REGION_LABEL, caseModeFor, globalSpecs, macroSnippet, methodSpecs } from './completionItems';
-import { entryMarkdown, getAnalysis, inStringOrComment, macroLabel } from './shared';
+import { entryMarkdown, getAnalysis, inStringOrComment, macroLabel, macroMarkdown } from './shared';
 
 const KIND: Record<EntryKind | 'block', vscode.CompletionItemKind> = {
   block: vscode.CompletionItemKind.Keyword,
@@ -73,6 +73,7 @@ export class ProsCompletionProvider implements vscode.CompletionItemProvider {
     for (const macro of analysis.macros) {
       const item = new vscode.CompletionItem(macro.name, vscode.CompletionItemKind.Function);
       item.detail = `macro ${macroLabel(macro)}`;
+      item.documentation = macroMarkdown(macro);
       item.insertText = new vscode.SnippetString(macroSnippet(macro.name, macro.params.map(p => p.text)));
       item.sortText = `0${macro.name}`;
       if (macro.params.length > 0) {
