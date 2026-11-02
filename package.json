@@ -51,7 +51,12 @@
         "scopeName": "source.pros",
         "path": "./syntaxes/pros.tmLanguage.json"
       }
-    ]
+    ],
+    "configurationDefaults": {
+      "[pros]": {
+        "editor.semanticHighlighting.enabled": true
+      }
+    }
   },
   "repository": {
     "type": "git",
