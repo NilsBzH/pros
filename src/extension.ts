@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import { ProsCompletionProvider } from './providers/completion';
 import { registerDiagnostics } from './providers/diagnostics';
 import { ProsHoverProvider } from './providers/hover';
+import { ProsReferenceProvider, ProsRenameProvider } from './providers/references';
 import { ProsSemanticTokensProvider, legend } from './providers/semanticTokens';
 import { ProsSignatureHelpProvider } from './providers/signature';
 import { ProsDefinitionProvider, ProsDocumentSymbolProvider } from './providers/symbols';
@@ -17,6 +18,8 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.languages.registerDocumentSymbolProvider(selector, new ProsDocumentSymbolProvider()),
     vscode.languages.registerDefinitionProvider(selector, new ProsDefinitionProvider()),
     vscode.languages.registerDocumentSemanticTokensProvider(selector, new ProsSemanticTokensProvider(), legend),
+    vscode.languages.registerReferenceProvider(selector, new ProsReferenceProvider()),
+    vscode.languages.registerRenameProvider(selector, new ProsRenameProvider()),
   );
   registerDiagnostics(context);
 }

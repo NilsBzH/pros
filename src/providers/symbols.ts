@@ -1,7 +1,6 @@
 // Document outline (macros with their variables, regions) and go to definition (macros, variables).
 import * as vscode from 'vscode';
-import { analyze, MacroInfo } from '../analysis/document';
-import { getAnalysis, inStringOrComment, macroAt, tokenRange, wordAt } from './shared';
+import { getAnalysis, inStringOrComment, macroAt, otherProsFiles, tokenRange, wordAt, wordRange } from './shared';
 
 export class ProsDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
   provideDocumentSymbols(document: vscode.TextDocument): vscode.DocumentSymbol[] {
@@ -33,21 +32,12 @@ export class ProsDocumentSymbolProvider implements vscode.DocumentSymbolProvider
   }
 }
 
-async function macrosInWorkspace(name: string, exclude: vscode.Uri): Promise<vscode.Location[]> {
+/** Definitions of a macro in the other .pros files of the workspace. */
+export async function macrosInWorkspace(name: string, exclude: vscode.Uri): Promise<vscode.Location[]> {
   const locations: vscode.Location[] = [];
-  const files = await vscode.workspace.findFiles('**/*.pros', '**/node_modules/**', 500);
-  for (const uri of files) {
-    if (uri.toString() === exclude.toString()) {
-      continue;
-    }
-    const open = vscode.workspace.textDocuments.find(d => d.uri.toString() === uri.toString());
-    const text = open ? open.getText() : Buffer.from(await vscode.workspace.fs.readFile(uri)).toString('utf8');
-    const analysis = analyze(text);
-    for (const macro of analysis.macros.filter((m: MacroInfo) => m.name === name)) {
-      const before = text.slice(0, macro.nameToken.start);
-      const line = before.split('\n').length - 1;
-      const character = macro.nameToken.start - (before.lastIndexOf('\n') + 1);
-      locations.push(new vscode.Location(uri, new vscode.Position(line, character)));
+  for (const { uri, analysis } of await otherProsFiles(exclude)) {
+    for (const macro of analysis.macros.filter(m => m.name === name)) {
+      locations.push(new vscode.Location(uri, wordRange(macro.nameToken)));
     }
   }
   return locations;

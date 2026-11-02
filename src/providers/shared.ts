@@ -26,6 +26,26 @@ export function tokenRange(document: vscode.TextDocument, token: Token): vscode.
   return new vscode.Range(document.positionAt(token.start), document.positionAt(token.end));
 }
 
+/** Range of a word token, without the document (words never span lines). */
+export function wordRange(token: Token): vscode.Range {
+  return new vscode.Range(token.line, token.character, token.line, token.character + token.text.length);
+}
+
+/** Analysis of the other .pros files of the workspace; open documents are read from the editor. */
+export async function otherProsFiles(exclude: vscode.Uri): Promise<{ uri: vscode.Uri; analysis: Analysis }[]> {
+  const files = await vscode.workspace.findFiles('**/*.pros', '**/node_modules/**', 500);
+  const result: { uri: vscode.Uri; analysis: Analysis }[] = [];
+  for (const uri of files) {
+    if (uri.toString() === exclude.toString()) {
+      continue;
+    }
+    const open = vscode.workspace.textDocuments.find(d => d.uri.toString() === uri.toString());
+    const analysis = open ? getAnalysis(open) : analyze(Buffer.from(await vscode.workspace.fs.readFile(uri)).toString('utf8'));
+    result.push({ uri, analysis });
+  }
+  return result;
+}
+
 /** True when the offset is inside a string or a comment. */
 export function inStringOrComment(analysis: Analysis, offset: number): boolean {
   const token = tokenAt(analysis.tokens, offset) ?? tokenAt(analysis.tokens, offset - 1);

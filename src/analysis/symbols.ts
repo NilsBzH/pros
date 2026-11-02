@@ -117,3 +117,40 @@ export function occurrencesOf(analysis: Analysis, ref: SymbolRef): Occurrence[] 
 export function macroOccurrences(analysis: Analysis, name: string): Occurrence[] {
   return occurrences(analysis).filter(o => o.ref.kind === 'macro' && o.ref.name === name);
 }
+
+// ---------------------------------------------------------------------------------------------
+// Rename
+
+const IDENTIFIER = /^[A-Za-z_À-ÿ][A-Za-z0-9_À-ÿ]*$/;
+
+/** Reason why the symbol cannot be renamed, or undefined. Macros defined elsewhere are checked by the caller. */
+export function renameError(occurrence: Occurrence | undefined): string | undefined {
+  if (!occurrence) {
+    return 'Only macros, parameters and variables of the document can be renamed.';
+  }
+  if (occurrence.ref.kind === 'undeclared') {
+    return `"${occurrence.ref.name}" is not declared in this document and cannot be renamed.`;
+  }
+  return undefined;
+}
+
+/** Reason why `newName` cannot replace the symbol, or undefined. */
+export function newNameError(analysis: Analysis, ref: SymbolRef, newName: string): string | undefined {
+  if (!IDENTIFIER.test(newName)) {
+    return `"${newName}" is not a valid name.`;
+  }
+  if (lookup(newName) || mixedCaseMatch(newName)) {
+    return `"${newName}" is a keyword or a built-in name.`;
+  }
+  if (analysis.macros.some(m => m.name === newName)) {
+    return `A macro named "${newName}" already exists.`;
+  }
+  if (ref.kind === 'macro') {
+    return undefined;
+  }
+  // Any name already written in the macro (or in the document for a document level variable) would be merged.
+  const scope = ref.scope;
+  const inScope = (o: Occurrence) => !scope || (scope.start.start <= o.token.start && o.token.start <= scope.end);
+  const taken = occurrences(analysis).some(o => o.token.text === newName && inScope(o));
+  return taken ? `"${newName}" is already used ${scope ? `in ${scope.name}` : 'in this document'}.` : undefined;
+}
