@@ -3,6 +3,25 @@
 All notable changes to the "pros-macro-language" extension are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.0] - 2026-11-02
+
+### Added
+
+- Semantic highlighting: macro parameters, variables, macros of the file, undeclared names and member accesses, wherever they are used. Turned on by default for `.pros` files.
+- Signature help for calls without parentheses (`SUBSTR string start length`), following the argument being typed.
+- Documentation comments: a `/* … */` comment right above `DEFINE`, with `@param name description` lines, is shown on hover, in the completion and in the signature help.
+- Find All References and Rename Symbol for parameters and variables (within their macro) and for macros (across the `.pros` files of the workspace).
+- Folding of blocks (`DEFINE`, `IF` and each of its branches, `WHILE`, `REPEAT`) and of multi-line comments, in addition to regions.
+- Document and selection formatting: re-indentation of the blocks and removal of trailing spaces.
+- Quick fixes for mixed case keywords, `//` comments, `trace_end` and `BRC name()` headers.
+- Parameter name hints in calls without parentheses, with the `pros.inlayHints.parameterNames` setting (`none`, `literals`, `all`).
+
+### Changed
+
+- Hover, signature help, completion details and diagnostics are written in English.
+- The hover no longer shows the manual page or the synonyms.
+- Functions and commands are completed with their name only (`Lpad(…)`, `SUBSTR `); the signature help then shows the parameters, instead of one field per parameter.
+
 ## [0.1.0] - 2026-10-28
 
 First public release. Unofficial extension, not affiliated with PROS or Conga.
