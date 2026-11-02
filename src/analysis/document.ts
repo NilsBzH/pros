@@ -94,7 +94,7 @@ export function analyze(text: string): Analysis {
     issues.push({ start: token.start, end: token.end, severity, message, code });
 
   const reportUnclosed = (frame: Frame) =>
-    report(frame.token, 'error', 'unclosed-block', `Bloc ${frame.token.text} non fermé : ${EXPECTED_CLOSER[frame.kind]} attendu.`);
+    report(frame.token, 'error', 'unclosed-block', `${frame.token.text} block is not closed: ${EXPECTED_CLOSER[frame.kind]} expected.`);
 
   const closeMacro = (frame: Frame, end: number, endToken?: Token) => {
     if (frame.macro) {
@@ -106,7 +106,7 @@ export function analyze(text: string): Analysis {
   // Unterminated strings and comments
   for (const token of tokens) {
     if (token.closed === false) {
-      const what = token.kind === 'string' ? 'Chaîne non fermée' : 'Commentaire non fermé : */ attendu';
+      const what = token.kind === 'string' ? 'Unclosed string' : 'Unclosed comment: */ expected';
       issues.push({ start: token.start, end: Math.min(token.end, token.start + 2), severity: 'error', code: `unclosed-${token.kind}`, message: `${what}.` });
     }
   }
@@ -117,7 +117,7 @@ export function analyze(text: string): Analysis {
     // "//" is not a comment: the language only has /* ... */ comments
     if (token.kind === 'operator' && token.text === '/' && code[i + 1]?.text === '/' && code[i + 1].start === token.end) {
       issues.push({ start: token.start, end: code[i + 1].end, severity: 'warning', code: 'line-comment',
-        message: "« // » n'est pas un commentaire en langage macro : utiliser /* … */." });
+        message: "\"//\" is not a comment in the macro language: use /* … */." });
       i++;
       continue;
     }
@@ -132,25 +132,25 @@ export function analyze(text: string): Analysis {
     const mixed = mixedCaseMatch(word);
     if (mixed) {
       report(token, 'warning', 'mixed-case',
-        `« ${word} » : les mots-clés s'écrivent tout en majuscules ou tout en minuscules (${mixed.upper} ou ${mixed.upper.toLowerCase()}).`);
+        `"${word}": keywords are written all upper case or all lower case (${mixed.upper} or ${mixed.upper.toLowerCase()}).`);
       continue;
     }
 
     if (form && INVALID_FORMS[form]) {
-      report(token, 'warning', 'invalid-form', `« ${word} » n'est pas valide : utiliser ${INVALID_FORMS[form]}.`);
+      report(token, 'warning', 'invalid-form', `"${word}" is not valid: use ${INVALID_FORMS[form]}.`);
       continue;
     }
 
     // "BRC name()" is not a valid header: macros start with DEFINE
     if (form === 'BRC' && code[i + 1]?.kind === 'word' && code[i + 2]?.text === '(' && (i === 0 || code[i - 1].line < token.line)) {
-      report(token, 'error', 'brc-header', "« BRC nom() » n'est pas un en-tête valide : utiliser DEFINE nom().");
+      report(token, 'error', 'brc-header', "\"BRC name()\" is not a valid header: use DEFINE name().");
       continue;
     }
 
     const entry = lookup(word);
     if (entry?.status === 'excluded') {
-      const replacement = entry.replacement ? ` Remplacement : ${entry.replacement}.` : '';
-      report(token, 'warning', 'excluded', `${entry.name} ne fonctionne plus sur la plateforme (${entry.reason}).${replacement}`);
+      const replacement = entry.replacement ? ` Use ${entry.replacement} instead.` : '';
+      report(token, 'warning', 'excluded', `${entry.name} no longer works on the platform (${entry.reason}).${replacement}`);
       continue;
     }
 
@@ -192,7 +192,7 @@ export function analyze(text: string): Analysis {
     if (closer) {
       const index = stack.map(f => f.kind).lastIndexOf(closer);
       if (index === -1) {
-        report(token, 'error', 'unexpected-closer', `${word} sans ${OPENER_NAME[closer]} correspondant.`);
+        report(token, 'error', 'unexpected-closer', `${word} without a matching ${OPENER_NAME[closer]}.`);
         continue;
       }
       while (stack.length - 1 > index) {
@@ -208,9 +208,9 @@ export function analyze(text: string): Analysis {
     if (ELSE_IF.has(form) || ELSE.has(form)) {
       const top = stack[stack.length - 1];
       if (!top || top.kind !== 'if') {
-        report(token, 'error', 'misplaced-else', `${word} en dehors d'un bloc IF.`);
+        report(token, 'error', 'misplaced-else', `${word} outside an IF block.`);
       } else if (top.hasElse) {
-        report(token, 'error', 'misplaced-else', `${word} après ELSE dans le même bloc IF.`);
+        report(token, 'error', 'misplaced-else', `${word} after ELSE in the same IF block.`);
       } else if (ELSE.has(form)) {
         top.hasElse = true;
       }
@@ -218,11 +218,11 @@ export function analyze(text: string): Analysis {
     }
 
     if (EXIT_LOOP.has(form) && !stack.some(f => f.kind === 'while' || f.kind === 'repeat')) {
-      report(token, 'warning', 'exit-outside', `${word} en dehors d'une boucle WHILE ou REPEAT.`);
+      report(token, 'warning', 'exit-outside', `${word} outside a WHILE or REPEAT loop.`);
       continue;
     }
     if (EXIT_MACRO.has(form) && !stack.some(f => f.kind === 'define')) {
-      report(token, 'warning', 'exit-outside', `${word} en dehors d'une macro.`);
+      report(token, 'warning', 'exit-outside', `${word} outside a macro.`);
     }
   }
 

@@ -4,7 +4,7 @@ Visual Studio Code extension for the **PROS Smart CPQ macro language**, used in 
 
 > **Unofficial extension.** This is a community project. It is not affiliated with, endorsed by or supported by PROS or Conga. "PROS" and "Smart CPQ" are only used to name the language the extension supports.
 >
-> No content of the PROS documentation is included: the descriptions shown by the completion and the hover are short summaries written for this extension, with a reference to the page of the manual where the details can be found.
+> No content of the PROS documentation is included: the descriptions shown by the completion, the hover and the signature help are short summaries written for this extension.
 
 ## Features
 
@@ -21,12 +21,12 @@ Visual Studio Code extension for the **PROS Smart CPQ macro language**, used in 
   - **Blocks**: `DEFINE`, `IF`, `ELSE_IF`, `ELSE`, `WHILE`, `REPEAT` and their French forms (`DEFINITION`, `SI`, `SINON_SI`, `SINON`, `TANT_QUE`, `REPETER`) insert the whole block, closing keyword included. Tab moves from one field to the next.
   - **Variants**: `IF … ELSE`, `IF … ELSE_IF … ELSE`, `SI … SINON` and `SI … SINON_SI … SINON` insert a block with its branches.
   - **Case**: keywords are inserted in the case you started typing (lower case if you type in lower case, upper case otherwise), never in mixed case.
-  - **Functions and commands**: the call is inserted with one field per parameter, following the documented syntax, e.g. `Lpad(string, lengthString, append)` or `SQL_QUERY query IN "table"`. Optional parameters get no field.
-  - `confML` methods after `confML.`, with one field per parameter.
-  - Macros (with their parameters) and variables of the file.
+  - **Functions and commands**: only the name is inserted, followed by parentheses (`Lpad(…)`, cursor inside) or by a space (`SUBSTR `); the signature help then shows the parameters.
+  - `confML` methods after `confML.`.
+  - Macros and variables of the file.
   - `#region`: inserts a `/*#region:name*/` … `/*#endregion*/` pair.
-- Hover: syntax, parameters, return value and manual page for every element of the language; definition line for the macros and variables of the file.
-- Signature help for calls with parentheses: functions, `confML` methods, constructors and macros of the file.
+- Hover: syntax, description, parameters and return value for every element of the language; definition line for the macros and variables of the file.
+- Signature help that follows the argument being typed, with or without parentheses: `Lpad(string, length, padding)` as well as `SUBSTR string start length`. The current parameter is highlighted and explained, optional parameters are shown between brackets. It works for functions, commands, `confML` and object methods, constructors and macros of the file.
 - Document outline (macros, their variables, regions) and "Go to Definition" for macros, including in the other `.pros` files of the workspace, and for variables.
 - Diagnostics:
   - unclosed or mismatched blocks;

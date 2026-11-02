@@ -1,5 +1,5 @@
 // Completion items built from the language reference, independent from the VS Code API.
-// Block keywords insert the whole block; functions and commands insert a call with one field per parameter.
+// Block keywords insert the whole block; functions and commands insert their name only, the signature help does the rest.
 import { Entry, EntryKind, entries, lookup, methodsOf } from '../data/reference';
 
 export type CaseMode = 'upper' | 'lower';
@@ -12,6 +12,8 @@ export interface CompletionSpec {
   detail: string;
   sortText: string;
   entry?: Entry;
+  /** Open the signature help once the item is inserted. */
+  signatureHelp?: boolean;
 }
 
 /** Lower case when the typed prefix is all lower case, upper case otherwise (keywords are never written in mixed case). */
@@ -25,14 +27,12 @@ export function applyCase(word: string, mode: CaseMode): string {
   return isUpperName && mode === 'lower' ? word.toLowerCase() : word;
 }
 
-const escape = (text: string) => text.replace(/[$}\\]/g, '\\$&');
-
 type Keyword = (word: string) => string;
 
 /** Whole blocks inserted by the block keywords; the macro body stays at the DEFINE level. */
 const BLOCKS: Record<string, (k: Keyword) => string> = {
-  DEFINE: k => `${k('DEFINE')} \${1:nom}(\${2})\n$0\n${k('END_DEFINE')}`,
-  DEFINITION: k => `${k('DEFINITION')} \${1:nom}(\${2})\n$0\n${k('FIN_DEFINITION')}`,
+  DEFINE: k => `${k('DEFINE')} \${1:name}(\${2})\n$0\n${k('END_DEFINE')}`,
+  DEFINITION: k => `${k('DEFINITION')} \${1:name}(\${2})\n$0\n${k('FIN_DEFINITION')}`,
   IF: k => `${k('IF')} \${1:condition}\n\t$0\n${k('END_IF')}`,
   SI: k => `${k('SI')} \${1:condition}\n\t$0\n${k('FIN_SI')}`,
   ELSE_IF: k => `${k('ELSE_IF')} \${1:condition}\n\t$0`,
@@ -62,7 +62,7 @@ const BLOCK_VARIANTS: { words: string[]; build: (k: Keyword) => string }[] = [
 
 /** Region markers folded by the editor (language-configuration.json); not a language construct. */
 export const REGION_LABEL = '#region';
-const REGION_SNIPPET = '/*#region:${1:nom}*/\n$0\n/*#endregion*/';
+const REGION_SNIPPET = '/*#region:${1:name}*/\n$0\n/*#endregion*/';
 
 function variantSpecs(mode: CaseMode): CompletionSpec[] {
   const keyword: Keyword = word => applyCase(word, mode);
@@ -74,51 +74,28 @@ function variantSpecs(mode: CaseMode): CompletionSpec[] {
     sortText: `1${variant.words.join(' ')}`,
     entry: lookup(variant.words[0]),
   }));
-  specs.push({ label: REGION_LABEL, kind: 'block', snippet: REGION_SNIPPET, detail: 'région repliable /*#region:nom*/ … /*#endregion*/', sortText: '4#region' });
+  specs.push({ label: REGION_LABEL, kind: 'block', snippet: REGION_SNIPPET, detail: 'foldable region /*#region:name*/ … /*#endregion*/', sortText: '4#region' });
   return specs;
 }
 
+/** True when the entry takes arguments: Name(…) with something between the parentheses, or NAME followed by parameters. */
+export function takesArguments(entry: Entry): boolean {
+  return [entry, ...(entry.overloads ?? [])].some(s => {
+    const syntax = entry.receiver ? s.syntax.slice(s.syntax.indexOf('.') + 1) : s.syntax;
+    return entry.style === 'paren' ? !/\(\s*\)/.test(syntax) : entry.style === 'space' && /\s\S/.test(syntax.trim());
+  });
+}
+
 /**
- * Call inserted for a function or command, built from its documented syntax:
- * optional parts ([...]) get no field, upper case words stay literal, other words become fields.
+ * Text inserted for a function, command or method: only its name, followed by parentheses (cursor inside)
+ * or by a space when it takes arguments. The parameters are then shown by the signature help.
  */
 export function callSnippet(entry: Entry, spelling: string, mode: CaseMode): string {
   const name = applyCase(spelling, mode);
-  if (entry.style === 'none') {
-    return name;
-  }
-  let syntax = entry.syntax.split(' | ')[0];
-  if (entry.receiver) {
-    syntax = syntax.slice(syntax.indexOf('.') + 1);
-  }
-  let field = 0;
-  const next = (text: string) => `\${${++field}:${escape(text)}}`;
-
   if (entry.style === 'paren') {
-    const inside = syntax.slice(syntax.indexOf('(') + 1, syntax.lastIndexOf(')'));
-    const params = inside.split(',').map(p => p.trim()).filter(p => p && !p.startsWith('['));
-    const fields = params.map(p => {
-      if (p === '…') {
-        return '';
-      }
-      const quoted = /^"(.*)"$/.exec(p);
-      return quoted ? `"${next(quoted[1])}"` : next(p);
-    }).filter(f => f !== '');
-    if (fields.length === 0) {
-      return params.length === 0 ? `${name}()` : `${name}($1)`;
-    }
-    return `${name}(${fields.join(', ')})`;
+    return takesArguments(entry) ? `${name}($0)` : `${name}()`;
   }
-
-  const rest = syntax.slice(syntax.indexOf(' ') + 1 || syntax.length).replace(/\[[^\]]*\]/g, ' ');
-  const parts = rest.split(/\s+/).filter(Boolean).map(part => {
-    const quoted = /^"(.*)"$/.exec(part);
-    if (quoted) {
-      return `"${next(quoted[1])}"`;
-    }
-    return /^[A-Z_]+$/.test(part) ? applyCase(part, mode) : next(part);
-  });
-  return [name, ...parts].join(' ');
+  return entry.style === 'space' && takesArguments(entry) ? `${name} ` : name;
 }
 
 const SORT: Record<Entry['status'], string> = { documented: '1', undocumented: '2', legacy: '3', excluded: '9' };
@@ -126,7 +103,7 @@ const SORT: Record<Entry['status'], string> = { documented: '1', undocumented: '
 function specsOf(entry: Entry, mode: CaseMode): CompletionSpec[] {
   return [entry.name, ...(entry.synonyms ?? [])].map(spelling => {
     const block = blockSnippet(spelling, mode);
-    const detail = spelling === entry.name ? entry.syntax : `${entry.syntax}  (synonyme de ${entry.name})`;
+    const detail = spelling === entry.name ? entry.syntax : `${entry.syntax}  (synonym of ${entry.name})`;
     return {
       label: applyCase(spelling, mode),
       kind: block ? 'block' : entry.kind,
@@ -134,6 +111,7 @@ function specsOf(entry: Entry, mode: CaseMode): CompletionSpec[] {
       detail,
       sortText: `${SORT[entry.status]}${spelling}`,
       entry,
+      signatureHelp: !block && entry.style !== 'none' && takesArguments(entry),
     };
   });
 }
@@ -158,7 +136,7 @@ export function methodSpecs(receiver: string): CompletionSpec[] {
   return methodsOf(receiver).filter(e => e.status !== 'excluded').flatMap(e => specsOf(e, 'upper'));
 }
 
-/** Call of a macro defined in the document, one field per parameter. */
+/** Call of a macro defined in the document: name and parentheses, the cursor inside when it has parameters. */
 export function macroSnippet(name: string, params: string[]): string {
-  return `${name}(${params.map((p, i) => `\${${i + 1}:${escape(p)}}`).join(', ')})`;
+  return params.length > 0 ? `${name}($0)` : `${name}()`;
 }

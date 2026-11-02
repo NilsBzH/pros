@@ -1,6 +1,6 @@
 // Completion: language reference (excluded entries left out), confML methods after "confML.", macros and variables of the document.
-// Block keywords insert the whole block and calls get one field per parameter (see completionItems.ts);
-// this replaces the former snippets file.
+// Block keywords insert the whole block; functions and commands insert their name and open the signature help
+// (see completionItems.ts).
 import * as vscode from 'vscode';
 import { EntryKind } from '../data/reference';
 import { CompletionSpec, REGION_LABEL, caseModeFor, globalSpecs, macroSnippet, methodSpecs } from './completionItems';
@@ -21,14 +21,20 @@ const KIND: Record<EntryKind | 'block', vscode.CompletionItemKind> = {
 
 const WORD = /[A-Za-z_À-ÿ][A-Za-z0-9_À-ÿ]*/;
 
+/** Opens the signature help right after a function name has been inserted. */
+const SIGNATURE_HELP: vscode.Command = { command: 'editor.action.triggerParameterHints', title: 'Show parameters' };
+
 function toItem(spec: CompletionSpec): vscode.CompletionItem {
   const item = new vscode.CompletionItem(spec.label, KIND[spec.kind]);
-  item.detail = spec.kind === 'block' ? `bloc — ${spec.detail}` : spec.detail;
+  item.detail = spec.kind === 'block' ? `block — ${spec.detail}` : spec.detail;
   if (spec.entry) {
     item.documentation = entryMarkdown(spec.entry);
   }
   item.insertText = spec.snippet === spec.label ? spec.label : new vscode.SnippetString(spec.snippet);
   item.sortText = spec.sortText;
+  if (spec.signatureHelp) {
+    item.command = SIGNATURE_HELP;
+  }
   return item;
 }
 
@@ -69,6 +75,9 @@ export class ProsCompletionProvider implements vscode.CompletionItemProvider {
       item.detail = `macro ${macroLabel(macro)}`;
       item.insertText = new vscode.SnippetString(macroSnippet(macro.name, macro.params.map(p => p.text)));
       item.sortText = `0${macro.name}`;
+      if (macro.params.length > 0) {
+        item.command = SIGNATURE_HELP;
+      }
       items.push(item);
     }
     const seen = new Set<string>();
@@ -78,7 +87,7 @@ export class ProsCompletionProvider implements vscode.CompletionItemProvider {
       }
       seen.add(variable.name);
       const item = new vscode.CompletionItem(variable.name, vscode.CompletionItemKind.Variable);
-      item.detail = variable.macro ? `variable (${variable.declaration}) de ${variable.macro.name}` : `variable (${variable.declaration})`;
+      item.detail = variable.macro ? `variable (${variable.declaration}) in ${variable.macro.name}` : `variable (${variable.declaration})`;
       item.sortText = `0${variable.name}`;
       items.push(item);
     }

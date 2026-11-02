@@ -60,41 +60,38 @@ test('blocks: closing keyword, fields and final cursor', () => {
   assert.equal(blockSnippet('TANT_QUE', 'lower'), 'tant_que ${1:condition}\n\t$0\nfin_tant_que');
   assert.equal(blockSnippet('REPEAT', 'upper'), 'REPEAT\n\t$1\nUNTIL (${2:condition})$0');
   assert.equal(blockSnippet('REPETER', 'upper'), 'REPETER\n\t$1\nJUSQU_A (${2:condition})$0');
-  assert.equal(blockSnippet('DEFINE', 'upper'), 'DEFINE ${1:nom}(${2})\n$0\nEND_DEFINE');
-  assert.equal(blockSnippet('DEFINITION', 'lower'), 'definition ${1:nom}(${2})\n$0\nfin_definition');
+  assert.equal(blockSnippet('DEFINE', 'upper'), 'DEFINE ${1:name}(${2})\n$0\nEND_DEFINE');
+  assert.equal(blockSnippet('DEFINITION', 'lower'), 'definition ${1:name}(${2})\n$0\nfin_definition');
   assert.equal(spec('END_IF').snippet, 'END_IF');
   assert.equal(spec('fin_si', 'lower').snippet, 'fin_si');
 });
 
-test('calls with parentheses: one field per parameter', () => {
-  assert.equal(spec('Lpad').snippet, 'Lpad(${1:string}, ${2:lengthString}, ${3:append})');
-  assert.equal(spec('IsDefined', 'lower').snippet, 'IsDefined(${1:expr})');
-  assert.equal(spec('DecimalRound').snippet, 'DecimalRound(${1:decimals}, ${2:value})');
-  assert.equal(spec('sum_if').snippet, 'sum_if("${1:tab1}", ${2:cond}, "${3:tab2}", "${4:result}")');
-  assert.equal(spec('ACDate').snippet, 'ACDate()');
-  assert.equal(spec('opInside').snippet, 'opInside(${1:v1}, ${2:v2})');
-  assert.equal(spec('opLike').snippet, 'opLike($1)');
-  assert.equal(callSnippet(lookupMethods('getObjectByCPE', 'confML')[0], 'getObjectByCPE', 'upper'), 'getObjectByCPE(${1:cpe})');
-  assert.equal(methodSpecs('confML').find(s => s.label === 'getBdtTableName')?.snippet, 'getBdtTableName(${1:bdtName})');
-  assert.equal(macroSnippet('child', ['p1', 'p2']), 'child(${1:p1}, ${2:p2})');
+test('calls with parentheses insert the name and the parentheses only, then open the signature help', () => {
+  assert.equal(spec('Lpad').snippet, 'Lpad($0)');
+  assert.equal(spec('IsDefined', 'lower').snippet, 'IsDefined($0)');
+  assert.equal(spec('sum_if').snippet, 'sum_if($0)');
+  assert.equal(spec('opLike').snippet, 'opLike($0)');
+  assert.equal(spec('ACDate').snippet, 'ACDate($0)');
+  assert.equal(spec('LinkedHashMap').snippet, 'LinkedHashMap()');
+  assert.equal(spec('SqlCloseCreatedPools').snippet, 'SqlCloseCreatedPools()');
+  assert.equal(spec('Lpad').signatureHelp, true);
+  assert.equal(spec('LinkedHashMap').signatureHelp, false);
+  assert.equal(callSnippet(lookupMethods('getObjectByCPE', 'confML')[0], 'getObjectByCPE', 'upper'), 'getObjectByCPE($0)');
+  assert.equal(macroSnippet('child', ['p1', 'p2']), 'child($0)');
+  assert.equal(macroSnippet('noParam', []), 'noParam()');
 });
 
-test('command style calls follow the documented syntax, optional parts get no field', () => {
-  assert.equal(spec('FIND_STR').snippet, 'FIND_STR ${1:chaîne} ${2:motif}');
-  assert.equal(spec('trouver_chaine', 'lower').snippet, 'trouver_chaine ${1:chaîne} ${2:motif}');
-  assert.equal(spec('SQL_QUERY').snippet, 'SQL_QUERY ${1:requête} IN "${2:tableau}"');
-  assert.equal(spec('sql_query', 'lower').snippet, 'sql_query ${1:requête} in "${2:tableau}"');
-  assert.equal(spec('DELETE').snippet, 'DELETE "${1:nom}"');
-  assert.equal(spec('LET').snippet, 'LET ${1:nom} ${2:expression}');
-  assert.equal(spec('LOCAL').snippet, 'LOCAL ${1:nom}');
-  assert.equal(spec('TRIM').snippet, 'TRIM ${1:expr}');
-  assert.equal(spec('TRACE').snippet, 'TRACE ${1:fichier}');
-  assert.equal(spec('DISPLAY').snippet, 'DISPLAY ${1:expr}');
-  assert.equal(spec('ERROR').snippet, 'ERROR ${1:statut} ${2:message}');
-  assert.equal(spec('ATAN2').snippet, 'ATAN2 ${1:y} ${2:x}');
-  assert.equal(spec('LIST').snippet, 'LIST');
+test('calls without parentheses insert the name and a space only, then open the signature help', () => {
+  assert.equal(spec('SUBSTR').snippet, 'SUBSTR ');
+  assert.equal(spec('sous_chaine', 'lower').snippet, 'sous_chaine ');
+  assert.equal(spec('SQL_QUERY').snippet, 'SQL_QUERY ');
+  assert.equal(spec('LET').snippet, 'LET ');
+  assert.equal(spec('LIST').snippet, 'LIST ');
+  assert.equal(spec('SUBSTR').signatureHelp, true);
   assert.equal(spec('TRACE_OFF').snippet, 'TRACE_OFF');
+  assert.equal(spec('TRACE_OFF').signatureHelp, false);
   assert.equal(spec('PI').snippet, 'PI');
+  assert.equal(spec('IF').signatureHelp, false);
 });
 
 test('multi-line IF variants and #region, found by typing IF, if, SI or si', () => {
@@ -102,7 +99,7 @@ test('multi-line IF variants and #region, found by typing IF, if, SI or si', () 
   assert.equal(spec('IF … ELSE_IF … ELSE').snippet, 'IF ${1:condition}\n\t$2\nELSE_IF ${3:condition}\n\t$4\nELSE\n\t$0\nEND_IF');
   assert.equal(spec('si … sinon', 'lower').snippet, 'si ${1:condition}\n\t$2\nsinon\n\t$0\nfin_si');
   assert.equal(spec('SI … SINON_SI … SINON').snippet, 'SI ${1:condition}\n\t$2\nSINON_SI ${3:condition}\n\t$4\nSINON\n\t$0\nFIN_SI');
-  assert.equal(spec('#region').snippet, '/*#region:${1:nom}*/\n$0\n/*#endregion*/');
+  assert.equal(spec('#region').snippet, '/*#region:${1:name}*/\n$0\n/*#endregion*/');
   for (const [mode, keyword] of [['upper', 'IF'], ['lower', 'if'], ['upper', 'SI'], ['lower', 'si']] as const) {
     const variants = globalSpecs(mode).filter(s => s.kind === 'block' && s.label.startsWith(`${keyword} …`));
     assert.equal(variants.length, 2, `${keyword}: ${variants.map(v => v.label)}`);
@@ -118,10 +115,9 @@ test('no block is inserted on a single line', () => {
   }
 });
 
-test('confML methods insert one field per parameter', () => {
+test('confML methods insert their name and parentheses', () => {
   const methods = new Map(methodSpecs('confML').map(s => [s.label, s.snippet]));
-  assert.equal(methods.get('getObjectByCPE'), 'getObjectByCPE(${1:cpe})');
-  assert.equal(methods.get('raiseBusinessExplanation'), 'raiseBusinessExplanation(${1:message}, ${2:label}, ${3:cpe})');
+  assert.equal(methods.get('getObjectByCPE'), 'getObjectByCPE($0)');
   assert.equal(methods.get('getDefaultPricingMethods'), 'getDefaultPricingMethods()');
   assert.equal(methods.size, 20);
 });

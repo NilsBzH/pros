@@ -26,7 +26,7 @@ export class ProsHoverProvider implements vscode.HoverProvider {
       }
       const md = entryMarkdown(methods[0]);
       if (target.receiver !== 'confML') {
-        md.appendMarkdown(`\n\n_Méthode de ${methods[0].receiver}, déduite de son nom._`);
+        md.appendMarkdown(`\n\n_Method of ${methods[0].receiver}, inferred from its name._`);
       }
       return new vscode.Hover(md, range);
     }
@@ -39,7 +39,7 @@ export class ProsHoverProvider implements vscode.HoverProvider {
     const macro = analysis.macros.find(m => m.name === target.word);
     if (macro) {
       const md = new vscode.MarkdownString().appendCodeblock(`DEFINE ${macroLabel(macro)}`, 'pros');
-      md.appendMarkdown(`Macro définie ligne ${macro.start.line + 1}.`);
+      md.appendMarkdown(`Macro defined on line ${macro.start.line + 1}.`);
       return new vscode.Hover(md, range);
     }
 
@@ -47,8 +47,8 @@ export class ProsHoverProvider implements vscode.HoverProvider {
     const variable = analysis.variables.find(v => v.name === target.word && v.macro === scope)
       ?? analysis.variables.find(v => v.name === target.word);
     if (variable) {
-      const where = variable.macro ? ` dans ${variable.macro.name}` : '';
-      return new vscode.Hover(new vscode.MarkdownString(`Variable déclarée par \`${variable.declaration}\` ligne ${variable.token.line + 1}${where}.`), range);
+      const where = variable.macro ? ` in ${variable.macro.name}` : '';
+      return new vscode.Hover(new vscode.MarkdownString(`Variable declared by \`${variable.declaration}\` on line ${variable.token.line + 1}${where}.`), range);
     }
     return undefined;
   }

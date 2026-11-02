@@ -27,7 +27,7 @@ export class ProsDocumentSymbolProvider implements vscode.DocumentSymbolProvider
     for (const region of analysis.regions) {
       const end = region.end ?? region.start;
       const range = new vscode.Range(document.positionAt(region.start.start), document.positionAt(end.end));
-      symbols.push(new vscode.DocumentSymbol(region.name, 'région', vscode.SymbolKind.Namespace, range, tokenRange(document, region.start)));
+      symbols.push(new vscode.DocumentSymbol(region.name, 'region', vscode.SymbolKind.Namespace, range, tokenRange(document, region.start)));
     }
     return symbols.sort((a, b) => a.range.start.compareTo(b.range.start));
   }
