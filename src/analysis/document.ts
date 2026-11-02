@@ -84,7 +84,7 @@ const DECLARATIONS = new Set(['LET', 'SOIT', 'LOCAL']);
 const EXPECTED_CLOSER: Record<BlockKind, string> = { define: 'END_DEFINE', if: 'END_IF', while: 'END_WHILE', repeat: 'UNTIL' };
 const OPENER_NAME: Record<BlockKind, string> = { define: 'DEFINE', if: 'IF', while: 'WHILE', repeat: 'REPEAT' };
 /** Spellings known to be invalid, with the form to use instead. */
-const INVALID_FORMS: Record<string, string> = { TRACE_END: 'TRACE_OFF' };
+export const INVALID_FORMS: Record<string, string> = { TRACE_END: 'TRACE_OFF' };
 
 interface Frame {
   kind: BlockKind;

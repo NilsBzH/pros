@@ -56,6 +56,27 @@
       "[pros]": {
         "editor.semanticHighlighting.enabled": true
       }
+    },
+    "configuration": {
+      "title": "PROS macro language",
+      "properties": {
+        "pros.inlayHints.parameterNames": {
+          "type": "string",
+          "enum": [
+            "none",
+            "literals",
+            "all"
+          ],
+          "enumDescriptions": [
+            "No parameter name hint.",
+            "Parameter names before numbers and strings passed to calls without parentheses.",
+            "Parameter names before every argument of calls without parentheses."
+          ],
+          "default": "literals",
+          "scope": "language-overridable",
+          "markdownDescription": "Parameter names shown inline in calls without parentheses, such as `SUBSTR s start: 2 length: 3`."
+        }
+      }
     }
   },
   "repository": {

@@ -208,8 +208,8 @@ function maxParts(entry: Entry): number {
   return Math.max(...signaturesOf(entry).map(s => s.parts.length));
 }
 
-/** Space call of `entry` named by tokens[index], if the cursor (after tokens[end - 1]) is among its arguments. */
-function spaceCallAt(tokens: Token[], index: number, end: number, offset: number, entry: Entry): SpaceCall | undefined {
+/** Arguments of the call without parentheses named by tokens[index], read up to `end` or to the first token that cannot be one. */
+function readArguments(tokens: Token[], index: number, end: number, entry: Entry): { items: Token[][]; next: number } {
   const keywords = keywordWords(entry);
   const limit = maxParts(entry);
   const command = entry.kind === 'command';
@@ -224,14 +224,21 @@ function spaceCallAt(tokens: Token[], index: number, end: number, offset: number
       continue;
     }
     if (!startsOperand(token)) {
-      return undefined;
+      break;
     }
     // The last parameter of a command takes a whole expression (LET x a + 1); other arguments are operands.
     const next = command && items.length === limit - 1 ? expression(tokens, i, end) : operand(tokens, i, end);
     items.push(tokens.slice(i, next));
     i = next;
   }
-  if (i < end) {
+  return { items, next: i };
+}
+
+/** Space call of `entry` named by tokens[index], if the cursor (after tokens[end - 1]) is among its arguments. */
+function spaceCallAt(tokens: Token[], index: number, end: number, offset: number, entry: Entry): SpaceCall | undefined {
+  const limit = maxParts(entry);
+  const { items, next } = readArguments(tokens, index, end, entry);
+  if (next < end) {
     return undefined;
   }
   const name = tokens[index];
@@ -343,25 +350,20 @@ function matches(item: Token[], words: string[] | undefined): boolean {
   return Boolean(entry && (words ?? []).some(w => lookup(w) === entry));
 }
 
-/** Active parameter of a call without parentheses for one signature; optional parameters count only when enough arguments are typed. */
-export function spaceActivity(signature: ParsedSignature, call: SpaceCall): Activity {
+/** Syntax part of each argument for one signature; optional parameters count only when enough arguments are typed. */
+export function spaceAssignment(signature: ParsedSignature, items: Token[][]): { parts: SyntaxPart[]; fits: boolean } {
   const keywordParts = signature.parts.filter(p => p.kind !== 'param');
-  const operands = call.items.filter(item => !keywordParts.some(p => matches(item, p.words))).length;
+  const operands = items.filter(item => !keywordParts.some(p => matches(item, p.words))).length;
   const required = signature.parts.filter(p => p.kind === 'param' && !p.optional).length;
   let optionalSlots = Math.max(0, operands - required);
-  let active = -1;
-  let i = 0;
+  const parts: SyntaxPart[] = [];
   for (const part of signature.parts) {
-    if (i >= call.items.length) {
+    if (parts.length >= items.length) {
       break;
     }
-    const item = call.items[i];
     if (part.kind === 'literal' || part.kind === 'choice') {
-      if (matches(item, part.words)) {
-        if (i === call.cursor) {
-          active = part.param ?? -1;
-        }
-        i++;
+      if (matches(items[parts.length], part.words)) {
+        parts.push(part);
       }
       continue;
     }
@@ -371,12 +373,44 @@ export function spaceActivity(signature: ParsedSignature, call: SpaceCall): Acti
       }
       optionalSlots--;
     }
-    if (i === call.cursor) {
-      active = part.param ?? -1;
-    }
-    i++;
+    parts.push(part);
   }
-  return { param: active, fits: i >= call.items.length };
+  return { parts, fits: parts.length >= items.length };
+}
+
+/** Active parameter of a call without parentheses for one signature. */
+export function spaceActivity(signature: ParsedSignature, call: SpaceCall): Activity {
+  const { parts, fits } = spaceAssignment(signature, call.items);
+  return { param: parts[call.cursor]?.param ?? -1, fits };
+}
+
+export interface SpaceArguments {
+  name: Token;
+  entry: Entry;
+  items: Token[][];
+}
+
+/** Every call without parentheses of the code, with the arguments written on its line. */
+export function spaceCalls(code: Token[]): SpaceArguments[] {
+  const calls: SpaceArguments[] = [];
+  for (let i = 0; i < code.length; i++) {
+    const token = code[i];
+    const entry = token.kind === 'word' && code[i - 1]?.text !== '.' ? lookup(token.text) : undefined;
+    // STR(x) is the same function written with parentheses.
+    if (!entry || entry.style !== 'space' || entry.status === 'excluded' || !['function', 'command'].includes(entry.kind)
+      || (code[i + 1]?.text === '(' && code[i + 1].start === token.end)) {
+      continue;
+    }
+    let end = i + 1;
+    while (end < code.length && code[end].line === token.line) {
+      end++;
+    }
+    const { items } = readArguments(code, i, end, entry);
+    if (items.length > 0) {
+      calls.push({ name: token, entry, items });
+    }
+  }
+  return calls;
 }
 
 /** Active parameter of a call with parentheses: one parameter per comma. */
