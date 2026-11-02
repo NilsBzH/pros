@@ -1,71 +1,35 @@
 # Changelog
 
-All notable changes to the "pros-macro-language" extension are documented in this file.
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
+All notable changes to the "pros-macro-language" extension. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions: [Semantic Versioning](https://semver.org/).
 
 ## [0.2.0] - 2026-11-02
 
 ### Added
 
-- Semantic highlighting: macro parameters, variables, macros of the file, undeclared names and member accesses, wherever they are used. Turned on by default for `.pros` files.
-- Signature help for calls without parentheses (`SUBSTR string start length`), following the argument being typed.
-- Documentation comments: a `/* … */` comment right above `DEFINE`, with `@param name description` lines, is shown on hover, in the completion and in the signature help.
-- Find All References and Rename Symbol for parameters and variables (within their macro) and for macros (across the `.pros` files of the workspace).
-- Folding of blocks (`DEFINE`, `IF` and each of its branches, `WHILE`, `REPEAT`) and of multi-line comments, in addition to regions.
-- Document and selection formatting: re-indentation of the blocks and removal of trailing spaces.
+- Semantic highlighting of parameters, variables, macros, undeclared names and members.
+- Signature help for calls without parentheses (`SUBSTR string start length`); it stays open while the arguments are typed, strings included.
+- Macro documentation comments (`/* … */` above `DEFINE`, `@param` lines), shown on hover, in the completion and in the signature help.
+- Find All References and Rename (F2) for variables, parameters and macros.
+- Document and selection formatting.
+- Folding of blocks and multi-line comments.
 - Quick fixes for mixed case keywords, `//` comments, `trace_end` and `BRC name()` headers.
 
 ### Changed
 
-- Hover, signature help, completion details and diagnostics are written in English.
-- The hover no longer shows the manual page or the synonyms.
-- Functions and commands are completed with their name only (`Lpad(…)`, `SUBSTR `); the signature help then shows the parameters, instead of one field per parameter.
+- All texts in English; the hover no longer shows the manual page or the synonyms.
+- Functions are completed with their name only; the signature help shows the parameters.
 
 ## [0.1.0] - 2026-10-28
 
 First public release. Unofficial extension, not affiliated with PROS or Conga.
 
-### Added
-
-- Completion:
-  - block keywords (`DEFINE`, `IF`, `ELSE_IF`, `ELSE`, `WHILE`, `REPEAT` and their French forms) insert the whole block, with its closing keyword and fields to fill in;
-  - multi-line `IF … ELSE` and `IF … ELSE_IF … ELSE` variants (and `SI …`);
-  - insertion in the typed case, never in mixed case;
-  - functions and commands inserted with one field per parameter, following the documented syntax;
-  - `confML` methods, macros and variables of the file, `#region`.
-- Hover: syntax, parameters, return value and manual page.
-- Signature help for calls with parentheses.
-- Document outline (macros, variables, regions) and "Go to Definition" for macros and variables.
-- Diagnostics:
-  - unclosed or mismatched blocks;
-  - misplaced `ELSE`;
-  - `EXIT_LOOP` / `EXIT_MACRO` outside their block;
-  - unclosed strings and comments;
-  - mixed case keywords;
-  - `//` used as a comment;
-  - commands that no longer work on the platform.
-- Language reference database, built from the CPQ 12 macro language manual and the "Macro-Based BRC" guide.
-- Grammar tests (`vscode-tmgrammar-test`) and unit tests (`node:test`), run by `npm test` and by the GitHub Actions workflow.
-- Extension icon.
-
-### Changed
-
-- TextMate grammar rebuilt from the language reference:
-  - upper or lower case keywords, English and French;
-  - strings escaped by doubling the quote;
-  - built-in functions, `confML` and Java calls;
-  - disabled commands are no longer highlighted as built-in functions.
-- Language configuration:
-  - indentation of English and French blocks, with no effect for a block written on one line;
-  - region folding;
-  - word definition.
-- README rewritten.
-
-### Removed
-
-- Snippets file, replaced by the completion.
-- Contribution pointing to a non-existent color theme.
-- `vsc-extension-quickstart.md` template file.
+- TextMate grammar rebuilt from the language reference (English and French keywords, built-in functions, `confML`, Java calls).
+- Language configuration: block indentation, region folding, word definition.
+- Completion of blocks, functions, `confML` methods, macros and variables of the file, in the typed case.
+- Hover, signature help, document outline and Go to Definition.
+- Diagnostics: mismatched blocks, misplaced `ELSE`, `EXIT_*` outside their block, unclosed strings or comments, mixed case keywords, `//` comments, disabled commands.
+- Unit and grammar tests, GitHub Actions workflow, extension icon.
+- Removed: snippets file (replaced by the completion), missing color theme, `vsc-extension-quickstart.md`.
 
 ## [0.0.1]
 
