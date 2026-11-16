@@ -2,16 +2,16 @@ import { test } from 'node:test';
 import * as assert from 'node:assert/strict';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { allSpellings, entries, lookup, lookupMethods, mixedCaseMatch } from '../../src/data/reference';
+import { allSpellings, entries, lookup, lookupMethods, mixedCaseMatch, restrictionNote } from '../../src/data/reference';
 
 const root = path.resolve(__dirname, '../../..');
 
 test('every entry has a description, a syntax, a source and a valid status', () => {
   for (const entry of entries) {
     assert.ok(entry.description && entry.syntax && entry.source, entry.name);
-    assert.ok(['documented', 'undocumented', 'legacy', 'excluded'].includes(entry.status), entry.name);
-    if (entry.status === 'excluded') {
-      assert.ok(entry.reason, `${entry.name}: excluded entries need a reason`);
+    assert.ok(['documented', 'undocumented', 'legacy', 'restricted'].includes(entry.status), entry.name);
+    if (entry.status === 'restricted') {
+      assert.ok(entry.reason, `${entry.name}: restricted entries need a reason`);
     }
   }
 });
@@ -53,11 +53,9 @@ function grammarWords(rule: string): string[] {
   return list ? list.split('|') : [];
 }
 
-test('grammar built-in functions are known and not excluded', () => {
+test('grammar built-in functions are known', () => {
   for (const word of grammarWords('builtin-functions')) {
-    const entry = lookup(word);
-    assert.ok(entry, `${word} is highlighted but missing from functions.json`);
-    assert.notEqual(entry.status, 'excluded', `${word} is highlighted but excluded`);
+    assert.ok(lookup(word), `${word} is highlighted but missing from functions.json`);
   }
 });
 
@@ -67,13 +65,29 @@ test('grammar confML methods match functions.json', () => {
   assert.deepEqual(highlighted, known);
 });
 
-test('excluded entries are not highlighted by the grammar', () => {
-  const highlighted = new Set([...grammarWords('builtin-functions'), ...grammarWords('commands'), ...grammarWords('control')]);
-  for (const entry of entries.filter(e => e.status === 'excluded')) {
+test('restricted entries are highlighted by the grammar like the others', () => {
+  const highlighted = new Set([...grammarWords('builtin-functions'), ...grammarWords('commands'), ...grammarWords('predefined-objects')]);
+  for (const entry of entries.filter(e => e.status === 'restricted')) {
     for (const spelling of allSpellings(entry)) {
-      assert.ok(!highlighted.has(spelling), `${spelling} is excluded but highlighted`);
+      assert.ok(highlighted.has(spelling), `${spelling} is restricted but not highlighted`);
     }
   }
+});
+
+test('restricted entries: neutral note with the manual page, never "no longer works"', () => {
+  assert.equal(restrictionNote(lookup('EXECUTE')!), 'Restricted or discouraged by the manual (p. 43): execution is not authorized on the server.');
+  assert.equal(restrictionNote(lookup('SqlConnectPool')!), 'Restricted or discouraged by the manual (p. 113): obsolete. Alternative: SqlConnectPool2.');
+  assert.equal(restrictionNote(lookup('SQL_EXPORT')!), 'Restricted or discouraged: considered obsolete. Alternative: SQL_QUERY.');
+  assert.equal(restrictionNote(lookup('DISPLAY')!), undefined);
+  for (const entry of entries.filter(e => e.status === 'restricted')) {
+    assert.doesNotMatch(restrictionNote(entry)!, /no longer works|not work/i, entry.name);
+  }
+});
+
+test('no parameter name inlay hints are contributed', () => {
+  const manifest = fs.readFileSync(path.join(root, 'package.json'), 'utf8');
+  assert.doesNotMatch(manifest, /inlayHints/);
+  assert.doesNotMatch(fs.readFileSync(path.join(root, 'src/extension.ts'), 'utf8'), /registerInlayHintsProvider/);
 });
 
 /** Text files of the repository with a given extension, outside dependencies and generated files. */

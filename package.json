@@ -3,7 +3,7 @@
   "displayName": "PROS CPQ Macro Language (unofficial)",
   "description": "Unofficial support for the PROS Smart CPQ macro language (Macro-Based BRC): syntax and semantic highlighting, completion, hover, signature help, outline, references, rename, formatting and diagnostics with quick fixes.",
   "publisher": "nilsbzh",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "license": "GPL-2.0-only",
   "icon": "images/icon.png",
   "keywords": [
@@ -55,6 +55,27 @@
     "configurationDefaults": {
       "[pros]": {
         "editor.semanticHighlighting.enabled": true
+      }
+    },
+    "configuration": {
+      "title": "PROS macro language",
+      "properties": {
+        "pros.diagnostics.restrictedCommands": {
+          "type": "string",
+          "enum": [
+            "off",
+            "hint",
+            "warning"
+          ],
+          "enumDescriptions": [
+            "Uses of restricted or discouraged commands are not reported.",
+            "Reported as hints (dotted underline).",
+            "Reported as warnings."
+          ],
+          "default": "off",
+          "scope": "language-overridable",
+          "markdownDescription": "Reports the uses of commands and functions that the manual restricts or discourages (file access, `EXECUTE`, SQL transactions…)."
+        }
       }
     }
   },

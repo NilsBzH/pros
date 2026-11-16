@@ -1,4 +1,4 @@
-// Completion: language reference (excluded entries left out), confML methods after "confML.", macros and variables of the document.
+// Completion: language reference, confML methods after "confML.", macros and variables of the document.
 // Block keywords insert the whole block; functions and commands insert their name and open the signature help
 // (see completionItems.ts).
 import * as vscode from 'vscode';

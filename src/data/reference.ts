@@ -5,7 +5,8 @@ import data from './functions.json';
 export type EntryKind =
   | 'keyword' | 'command' | 'function' | 'command-function' | 'operator'
   | 'constant' | 'method' | 'class' | 'object';
-export type EntryStatus = 'documented' | 'undocumented' | 'legacy' | 'excluded';
+/** restricted: restricted or discouraged by the manual, still highlighted, completed and documented. */
+export type EntryStatus = 'documented' | 'undocumented' | 'legacy' | 'restricted';
 
 export interface Param {
   name: string;
@@ -31,11 +32,25 @@ export interface Entry extends Signature {
   source: string;
   status: EntryStatus;
   receiver?: string;
+  /** Why a restricted entry is restricted, as stated by the manual. */
   reason?: string;
+  /** True when the restriction is not stated by the manual. */
+  reasonOutsideManual?: boolean;
   replacement?: string;
 }
 
 export const entries: Entry[] = (data as { entries: Entry[] }).entries;
+
+/** Neutral note on a restricted entry: "Restricted or discouraged by the manual (p. 43): reason." */
+export function restrictionNote(entry: Entry): string | undefined {
+  if (entry.status !== 'restricted') {
+    return undefined;
+  }
+  const page = /p\. [\d-]+/.exec(entry.source)?.[0];
+  const by = entry.reasonOutsideManual || !page ? '' : ` by the manual (${page})`;
+  const replacement = entry.replacement ? ` Alternative: ${entry.replacement}.` : '';
+  return `Restricted or discouraged${by}: ${entry.reason}.${replacement}`;
+}
 
 /** All accepted spellings of a name: upper case names also accept lower case. */
 export function spellingsOf(name: string): string[] {

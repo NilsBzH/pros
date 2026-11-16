@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import * as assert from 'node:assert/strict';
-import { analyze } from '../../src/analysis/document';
+import { analyze, reportedIssues } from '../../src/analysis/document';
 
 const codes = (text: string) => analyze(text).issues.map(i => i.code);
 
@@ -63,10 +63,10 @@ test('comments and strings are ignored by block matching', () => {
   assert.deepEqual(codes('DEFINE m()\n/*ELSE_IF x = 1\nEND_IF */ LET s "END_IF"\nEND_DEFINE'), []);
 });
 
-test('mixed case keywords, excluded commands, invalid forms and "//"', () => {
+test('mixed case keywords, restricted commands, invalid forms and "//"', () => {
   assert.deepEqual(codes('Display x'), ['mixed-case']);
-  assert.deepEqual(codes('OPEN_FILE 1 "r" "f"'), ['excluded']);
-  assert.deepEqual(codes('LET c ReadFile("f")'), ['excluded']);
+  assert.deepEqual(codes('OPEN_FILE 1 "r" "f"'), ['restricted']);
+  assert.deepEqual(codes('LET c ReadFile("f")'), ['restricted']);
   assert.deepEqual(codes('TRACE_OFF\ntrace_end'), ['invalid-form']);
   assert.deepEqual(codes('LET a 1 // b'), ['line-comment']);
   assert.deepEqual(codes('BRC m()\nEND_DEFINE'), ['brc-header', 'unexpected-closer']);
@@ -90,4 +90,15 @@ test('macros, parameters and variables', () => {
 test('regions', () => {
   const analysis = analyze('/*#region:Calcul*/\nLET a 1\n/*#endregion*/\n/* region */\n/* endregion */');
   assert.deepEqual(analysis.regions.map(r => [r.name, r.end?.line]), [['Calcul', 2], ['region', 4]]);
+});
+
+test('restricted commands are not reported by default (pros.diagnostics.restrictedCommands)', () => {
+  const issues = analyze('LET a "display 1"\nEXECUTE a\nexecute a').issues;
+  assert.deepEqual(reportedIssues(issues, 'off'), []);
+  assert.deepEqual(reportedIssues(issues, 'hint').map(i => i.severity), ['hint', 'hint']);
+  assert.deepEqual(reportedIssues(issues, 'warning').map(i => i.severity), ['warning', 'warning']);
+  assert.equal(issues[0].message, 'EXECUTE: Restricted or discouraged by the manual (p. 43): execution is not authorized on the server.');
+  assert.doesNotMatch(issues.map(i => i.message).join(' '), /no longer works/i);
+  // Other issues are kept whatever the setting.
+  assert.deepEqual(reportedIssues(analyze('Display x').issues, 'off').map(i => i.code), ['mixed-case']);
 });

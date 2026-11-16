@@ -122,10 +122,26 @@ test('confML methods insert their name and parentheses', () => {
   assert.equal(methods.size, 20);
 });
 
-test('excluded entries are never proposed', () => {
-  for (const label of ['OPEN_FILE', 'ReadFile', 'EXECUTE', 'SAVE', 'SQL_EXPORT', 'EnableTrace']) {
-    assert.equal(globalSpecs('upper').some(s => s.label === label), false, label);
+test('restricted entries are proposed like the others', () => {
+  assert.equal(spec('EXECUTE').snippet, 'EXECUTE ');
+  assert.equal(spec('EXECUTE').signatureHelp, true);
+  assert.equal(spec('execute', 'lower').snippet, 'execute ');
+  assert.equal(spec('ReadFile').snippet, 'ReadFile($0)');
+  for (const label of ['OPEN_FILE', 'SAVE', 'SQL_EXPORT', 'EnableTrace', 'ACLink']) {
+    spec(label);
   }
+});
+
+test('functions, commands and methods insert no parameter field, only their name', () => {
+  const calls = [...globalSpecs('upper'), ...globalSpecs('lower'), ...methodSpecs('confML')].filter(s => s.kind !== 'block');
+  for (const s of calls) {
+    assert.ok(!/\$\{|\$[1-9]/.test(s.snippet), `${s.label}: ${s.snippet}`);
+  }
+  assert.equal(spec('REPLACE_STR').snippet, 'REPLACE_STR ');
+  assert.equal(spec('FIND_STR').snippet, 'FIND_STR ');
+  assert.equal(spec('replace_str', 'lower').snippet, 'replace_str ');
+  assert.ok(spec('REPLACE_STR').signatureHelp && spec('FIND_STR').signatureHelp);
+  assert.ok(methodSpecs('confML').every(s => /^\w+\(\$0\)$|^\w+\(\)$/.test(s.snippet)));
 });
 
 test('every generated snippet has well formed fields', () => {

@@ -20,7 +20,7 @@ function helpAt(source: string): { label: string; param: string | undefined } | 
 }
 
 test('every syntax lists its parameters in the same order as "params"', () => {
-  for (const entry of entries.filter(e => e.status !== 'excluded' && e.style !== 'none')) {
+  for (const entry of entries.filter(e => e.style !== 'none')) {
     for (const signature of signaturesOf(entry)) {
       const fromSyntax = signature.parts.filter(p => p.param !== undefined).length;
       assert.equal(fromSyntax, signature.params.length, `${entry.name}: ${signature.label}`);
@@ -68,6 +68,11 @@ test('no signature help once a call is complete or outside a call', () => {
   assert.equal(helpAt('SUBSTR|'), undefined);
   assert.equal(helpAt('LET a 1\n|'), undefined);
   assert.equal(helpAt('IF a = 1 |'), undefined);
+});
+
+test('restricted entries have a signature help like the others', () => {
+  assert.deepEqual(helpAt('EXECUTE |'), { label: 'EXECUTE variable', param: 'variable' });
+  assert.deepEqual(helpAt('LET c ReadFile(|'), { label: 'ReadFile(file)', param: 'file' });
 });
 
 test('the signature help stays open while a string argument is typed, not in a comment', () => {

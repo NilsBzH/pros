@@ -80,7 +80,7 @@ function isBinary(token: Token | undefined): boolean {
 /** Built-in function written without parentheses (STR x, SUBSTR s 1 2). */
 function spaceFunction(token: Token): Entry | undefined {
   const entry = token.kind === 'word' ? lookup(token.text) : undefined;
-  return entry && entry.style === 'space' && entry.kind === 'function' && entry.status !== 'excluded' ? entry : undefined;
+  return entry && entry.style === 'space' && entry.kind === 'function' ? entry : undefined;
 }
 
 /** Words that can start an operand: anything but keywords and commands. */
@@ -265,7 +265,7 @@ function spaceSearch(tokens: Token[], from: number, end: number, offset: number)
       continue;
     }
     const entry = lookup(t.text);
-    if (!entry || entry.style !== 'space' || entry.status === 'excluded' || !['function', 'command'].includes(entry.kind)) {
+    if (!entry || entry.style !== 'space' || !['function', 'command'].includes(entry.kind)) {
       continue;
     }
     const call = spaceCallAt(tokens, i, end, offset, entry);
@@ -329,7 +329,7 @@ export function parenEntry(call: ParenCall): Entry | undefined {
     return methods.length === 1 ? methods[0] : undefined;
   }
   const entry = lookup(call.name.text);
-  return entry && entry.style === 'paren' && entry.status !== 'excluded' ? entry : undefined;
+  return entry && entry.style === 'paren' ? entry : undefined;
 }
 
 // ---------------------------------------------------------------------------------------------

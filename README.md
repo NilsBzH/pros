@@ -13,7 +13,8 @@ VS Code support for the **PROS Smart CPQ macro language** (Macro-Based BRC rules
 - **Navigation**: outline, Go to Definition, Find All References and Rename (F2). Variables are scoped to their macro; macros are searched in every `.pros` file of the workspace.
 - **Formatting** (Shift+Alt+F, or Ctrl+K Ctrl+F for a selection): re-indents blocks and removes trailing spaces. The macro body stays at the `DEFINE` level. One-line blocks, continuation lines (`+ …`) and multi-line strings or comments are kept as they are.
 - **Folding** of blocks (each `IF` branch on its own), comments and `/*#region:name*/ … /*#endregion*/`.
-- **Diagnostics** with quick fixes (Ctrl+.): unclosed or mismatched blocks, misplaced `ELSE`, `EXIT_*` outside their block, unclosed strings or comments, mixed case keywords (`Display`), `//` comments, `trace_end`, `BRC name()` headers, commands that no longer work on the platform.
+- **Diagnostics** with quick fixes (Ctrl+.): unclosed or mismatched blocks, misplaced `ELSE`, `EXIT_*` outside their block, unclosed strings or comments, mixed case keywords (`Display`), `//` comments, `trace_end`, `BRC name()` headers.
+- **Restricted commands**: commands the manual restricts or discourages (file access, `EXECUTE`, SQL transactions…) work like the others; their hover shows a neutral note. Set `pros.diagnostics.restrictedCommands` to `hint` or `warning` to have their uses reported (`off` by default).
 
 ## Documenting macros
 

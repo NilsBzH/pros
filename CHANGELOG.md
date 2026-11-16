@@ -2,6 +2,18 @@
 
 All notable changes to the "pros-macro-language" extension. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions: [Semantic Versioning](https://semver.org/).
 
+## [0.2.2] - 2026-11-16
+
+### Changed
+
+- Commands and functions restricted or discouraged by the manual (file access, `EXECUTE`, SQL transactions…) are now highlighted, completed and documented like the others. The hover shows a neutral note with the manual page.
+- Their uses are no longer reported by default: setting `pros.diagnostics.restrictedCommands` (`off`, `hint`, `warning`).
+- All displayed texts are in English and written for the extension; a few descriptions were reworded.
+
+### Removed
+
+- Parameter name hints shown inside the editor; parameters are shown in the signature help only.
+
 ## [0.2.0] - 2026-11-02
 
 ### Added

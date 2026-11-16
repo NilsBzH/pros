@@ -45,18 +45,23 @@ MESSAGE "warning"
 TRACE_OFF
 # <--------- keyword.other.pros
 OPEN_FILE 1 "r" "toto"
-# <--------- - keyword.other.pros
-# <--------- - support.function.pros
+# <--------- keyword.other.pros
 LET c ReadFile("toto.txt")
-#     ^^^^^^^^ - support.function.pros
-#     ^^^^^^^^ entity.name.function.pros
+#     ^^^^^^^^ support.function.pros
 SAVE MACRO "file"
-# <---- - keyword.other.pros
+# <---- keyword.other.pros
 EXECUTE a
-# <------- - keyword.other.pros
-# <------- - support.function.pros
+# <------- keyword.other.pros
+execute a
+# <------- keyword.other.pros
+EXECUTER a
+# <-------- keyword.other.pros
 EnableTrace()
-# <----------- - support.function.pros
+# <----------- support.function.pros
+LET x ROUND y
+#     ^^^^^ support.function.pros
+LET l ACLink()
+#     ^^^^^^ support.class.pros
 LET x ARRONDI y
 #     ^^^^^^^ keyword.other.pros
 LET x OU_EXCL y

@@ -1,8 +1,8 @@
 // Document analysis independent from the VS Code API: block matching, macros, variables, regions and issues.
 import { Token, tokenize } from './lexer';
-import { keywordForm, lookup, mixedCaseMatch } from '../data/reference';
+import { keywordForm, lookup, mixedCaseMatch, restrictionNote } from '../data/reference';
 
-export type Severity = 'error' | 'warning' | 'information';
+export type Severity = 'error' | 'warning' | 'information' | 'hint';
 
 export interface Issue {
   start: number;
@@ -10,6 +10,16 @@ export interface Issue {
   severity: Severity;
   message: string;
   code: string;
+}
+
+/** Value of the pros.diagnostics.restrictedCommands setting. */
+export type RestrictedMode = 'off' | 'hint' | 'warning';
+
+/** Issues to report: uses of restricted entries are left out (off) or reported with the chosen severity. */
+export function reportedIssues(issues: Issue[], restricted: RestrictedMode): Issue[] {
+  return issues
+    .filter(i => i.code !== 'restricted' || restricted !== 'off')
+    .map(i => (i.code === 'restricted' ? { ...i, severity: restricted as Severity } : i));
 }
 
 export interface MacroInfo {
@@ -173,9 +183,10 @@ export function analyze(text: string): Analysis {
     }
 
     const entry = lookup(word);
-    if (entry?.status === 'excluded') {
-      const replacement = entry.replacement ? ` Use ${entry.replacement} instead.` : '';
-      report(token, 'warning', 'excluded', `${entry.name} no longer works on the platform (${entry.reason}).${replacement}`);
+    const note = entry && restrictionNote(entry);
+    if (entry && note) {
+      // Reported or not depending on the setting (see reportedIssues).
+      report(token, 'information', 'restricted', `${entry.name}: ${note}`);
       continue;
     }
 

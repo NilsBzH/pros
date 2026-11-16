@@ -98,7 +98,7 @@ export function callSnippet(entry: Entry, spelling: string, mode: CaseMode): str
   return entry.style === 'space' && takesArguments(entry) ? `${name} ` : name;
 }
 
-const SORT: Record<Entry['status'], string> = { documented: '1', undocumented: '2', legacy: '3', excluded: '9' };
+const SORT: Record<Entry['status'], string> = { documented: '1', undocumented: '2', legacy: '3', restricted: '4' };
 
 function specsOf(entry: Entry, mode: CaseMode): CompletionSpec[] {
   return [entry.name, ...(entry.synonyms ?? [])].map(spelling => {
@@ -118,12 +118,12 @@ function specsOf(entry: Entry, mode: CaseMode): CompletionSpec[] {
 
 const globalCache = new Map<CaseMode, CompletionSpec[]>();
 
-/** One item per spelling (name and synonyms) of every non excluded global entry, plus the IF variants and #region. */
+/** One item per spelling (name and synonyms) of every global entry, plus the IF variants and #region. */
 export function globalSpecs(mode: CaseMode): CompletionSpec[] {
   let specs = globalCache.get(mode);
   if (!specs) {
     specs = [
-      ...entries.filter(e => !e.receiver && e.status !== 'excluded').flatMap(e => specsOf(e, mode)),
+      ...entries.filter(e => !e.receiver).flatMap(e => specsOf(e, mode)),
       ...variantSpecs(mode),
     ];
     globalCache.set(mode, specs);
@@ -133,7 +133,7 @@ export function globalSpecs(mode: CaseMode): CompletionSpec[] {
 
 /** Methods of a known receiver (confML). */
 export function methodSpecs(receiver: string): CompletionSpec[] {
-  return methodsOf(receiver).filter(e => e.status !== 'excluded').flatMap(e => specsOf(e, 'upper'));
+  return methodsOf(receiver).flatMap(e => specsOf(e, 'upper'));
 }
 
 /** Call of a macro defined in the document: name and parentheses, the cursor inside when it has parameters. */

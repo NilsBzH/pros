@@ -212,7 +212,7 @@
       "name": "support.class.java.pros"
     },
     "predefined-objects": {
-      "match": "\\b(?:ACMailMessage|ACDate|ACMail)\\b",
+      "match": "\\b(?:ACMailMessage|ACDate|ACLink|ACMail)\\b",
       "name": "support.class.pros"
     },
     "environments": {
@@ -229,7 +229,7 @@
       ]
     },
     "builtin-functions": {
-      "match": "\\b(?:SqlCloseCreatedPools|remplacer_chaine|REMPLACER_CHAINE|chercher_chaine|CHERCHER_CHAINE|SqlConnectPool2|trouver_chaine|TROUVER_CHAINE|DecimalRound|SqlReadTable|DaysBetween|IsConnected|replace_str|REPLACE_STR|sous_chaine|SOUS_CHAINE|StringFnawk|IsDefined|IsInArray|majuscule|MAJUSCULE|minuscule|MINUSCULE|oteblancs|OTEBLANCS|find_str|FIND_STR|IsNumber|IsObject|IsString|longueur|LONGUEUR|IsArray|IsEqual|version|VERSION|chaine|CHAINE|length|LENGTH|nombre|NOMBRE|number|NUMBER|racine|RACINE|substr|SUBSTR|atan2|ATAN2|carre|CARRE|fract|FRACT|heure|HEURE|lower|LOWER|upper|UPPER|acos|ACOS|aifn|AIFN|asin|ASIN|atan|ATAN|date|DATE|Lpad|Rpad|sqrt|SQRT|time|TIME|trim|TRIM|abs|ABS|Chr|cos|COS|ent|ENT|exp|EXP|int|INT|log|LOG|rpt|RPT|sin|SIN|sqr|SQR|str|STR|tan|TAN|ln|LN)\\b",
+      "match": "\\b(?:SqlCloseCreatedPools|CreateDirectoryTree|remplacer_chaine|REMPLACER_CHAINE|chercher_chaine|CHERCHER_CHAINE|ClearCleanupsTo|CreateDirectory|SqlConnectPool2|GetNumCleanups|SqlConnectPool|trouver_chaine|TROUVER_CHAINE|acces_fichier|ACCES_FICHIER|CreateJarFile|CreateZipFile|ExpandJarFile|ExpandZipFile|SetAnalyzeOff|DecimalRound|DisableTrace|SetAnalyzeOn|SqlReadTable|access_file|ACCESS_FILE|DaysBetween|EnableTrace|file_access|FILE_ACCESS|IsConnected|PushCleanup|replace_str|REPLACE_STR|sous_chaine|SOUS_CHAINE|StringFnawk|DeleteFile|OpenSubKey|RenameFile|IsDefined|IsInArray|majuscule|MAJUSCULE|minuscule|MINUSCULE|oteblancs|OTEBLANCS|WriteFile|CopyFile|find_str|FIND_STR|IsNumber|IsObject|IsString|longueur|LONGUEUR|ReadFile|winexe32|WINEXE32|IsArray|IsEqual|version|VERSION|chaine|CHAINE|length|LENGTH|nombre|NOMBRE|number|NUMBER|racine|RACINE|substr|SUBSTR|atan2|ATAN2|carre|CARRE|fract|FRACT|heure|HEURE|lower|LOWER|round|ROUND|upper|UPPER|acos|ACOS|aifn|AIFN|asin|ASIN|atan|ATAN|date|DATE|Lpad|Rpad|sqrt|SQRT|time|TIME|trim|TRIM|abs|ABS|Chr|cos|COS|ent|ENT|exp|EXP|int|INT|log|LOG|rpt|RPT|sin|SIN|sqr|SQR|str|STR|tan|TAN|ln|LN)\\b",
       "name": "support.function.pros"
     },
     "table-functions": {
@@ -245,7 +245,7 @@
       "name": "keyword.control.pros"
     },
     "commands": {
-      "match": "\\b(?:supprimer_environnement|SUPPRIMER_ENVIRONNEMENT|changer_environnement|CHANGER_ENVIRONNEMENT|creer_environnement|CREER_ENVIRONNEMENT|créer_environnement|change_environment|CHANGE_ENVIRONMENT|create_environment|CREATE_ENVIRONMENT|delete_environment|DELETE_ENVIRONMENT|supprimer_macro|SUPPRIMER_MACRO|environnement|ENVIRONNEMENT|supprimer_var|SUPPRIMER_VAR|delete_macro|DELETE_MACRO|environment|ENVIRONMENT|concat_anc|CONCAT_ANC|delete_var|DELETE_VAR|sql_query|SQL_QUERY|supprimer|SUPPRIMER|trace_fin|TRACE_FIN|trace_off|TRACE_OFF|afficher|AFFICHER|supp_anc|SUPP_ANC|variable|VARIABLE|del_old|DEL_OLD|display|DISPLAY|message|MESSAGE|append|APPEND|delete|DELETE|detail|DETAIL|droite|DROITE|erreur|ERREUR|gauche|GAUCHE|lister|LISTER|error|ERROR|macro|MACRO|right|RIGHT|selon|SELON|trace|TRACE|using|USING|avec|AVEC|dans|DANS|left|LEFT|list|LIST|name|NAME|tout|TOUT|with|WITH|all|ALL|nom|NOM|in|IN)\\b",
+      "match": "\\b(?:supprimer_environnement|SUPPRIMER_ENVIRONNEMENT|changer_environnement|CHANGER_ENVIRONNEMENT|sql_begin_transaction|SQL_BEGIN_TRANSACTION|creer_environnement|CREER_ENVIRONNEMENT|créer_environnement|change_environment|CHANGE_ENVIRONMENT|create_environment|CREATE_ENVIRONMENT|delete_environment|DELETE_ENVIRONMENT|sql_disconnect_rb|SQL_DISCONNECT_RB|sql_deconnect_rb|SQL_DECONNECT_RB|supprimer_macro|SUPPRIMER_MACRO|ecrire_fichier|ECRIRE_FICHIER|fermer_fichier|FERMER_FICHIER|ouvrir_fichier|OUVRIR_FICHIER|sql_disconnect|SQL_DISCONNECT|environnement|ENVIRONNEMENT|sql_deconnect|SQL_DECONNECT|supprimer_var|SUPPRIMER_VAR|delete_macro|DELETE_MACRO|lire_fichier|LIRE_FICHIER|sql_rollback|SQL_ROLLBACK|environment|ENVIRONMENT|close_file|CLOSE_FILE|concat_anc|CONCAT_ANC|delete_var|DELETE_VAR|sql_commit|SQL_COMMIT|sql_create|SQL_CREATE|sql_delete|SQL_DELETE|sql_export|SQL_EXPORT|sql_insert|SQL_INSERT|sql_update|SQL_UPDATE|write_file|WRITE_FILE|open_file|OPEN_FILE|read_file|READ_FILE|sql_query|SQL_QUERY|supprimer|SUPPRIMER|trace_fin|TRACE_FIN|trace_off|TRACE_OFF|afficher|AFFICHER|executer|EXECUTER|sql_drop|SQL_DROP|supp_anc|SUPP_ANC|variable|VARIABLE|charger|CHARGER|del_old|DEL_OLD|display|DISPLAY|execute|EXECUTE|message|MESSAGE|typevar|TYPEVAR|append|APPEND|delete|DELETE|detail|DETAIL|droite|DROITE|erreur|ERREUR|gauche|GAUCHE|lister|LISTER|sauver|SAUVER|system|SYSTEM|winexe|WINEXE|error|ERROR|fnawk|FNAWK|macro|MACRO|right|RIGHT|selon|SELON|shell|SHELL|trace|TRACE|using|USING|avec|AVEC|dans|DANS|left|LEFT|list|LIST|load|LOAD|name|NAME|save|SAVE|tout|TOUT|with|WITH|all|ALL|nom|NOM|in|IN)\\b",
       "name": "keyword.other.pros"
     },
     "legacy-keywords": {

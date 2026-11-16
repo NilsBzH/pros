@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { analyze, Analysis, MacroInfo } from '../analysis/document';
 import { Token, tokenAt } from '../analysis/lexer';
 import { macroDocumentation } from '../analysis/signatureHelp';
-import { Entry, Param } from '../data/reference';
+import { Entry, Param, restrictionNote } from '../data/reference';
 
 const cache = new Map<string, { version: number; analysis: Analysis }>();
 
@@ -88,11 +88,11 @@ function paramLine(param: Param): string {
 export function entryMarkdown(entry: Entry): vscode.MarkdownString {
   const md = new vscode.MarkdownString();
   md.appendCodeblock([entry.syntax, ...(entry.overloads ?? []).map(o => o.syntax)].join('\n'), 'pros');
-  if (entry.status === 'excluded') {
-    const replacement = entry.replacement ? ` Use \`${entry.replacement}\` instead.` : '';
-    md.appendMarkdown(`⚠ **No longer works on the platform** (${entry.reason}).${replacement}\n\n`);
-  }
   md.appendMarkdown(`${entry.description}\n\n`);
+  const note = restrictionNote(entry);
+  if (note) {
+    md.appendMarkdown(`_${note}_\n\n`);
+  }
   if (entry.params && entry.params.length > 0) {
     md.appendMarkdown(`${entry.params.map(paramLine).join('\n')}\n\n`);
   }
